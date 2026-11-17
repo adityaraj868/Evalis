@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -57,9 +58,16 @@ public class AdminController {
     }
 
     @GetMapping("/audit-logs")
-    public String auditLogs(Model model) {
-        List<AuditLog> logs = auditService.getAllLogs();
+    public String auditLogs(@RequestParam(value = "action", required = false) String action,
+                            @RequestParam(value = "resourceType", required = false) String resourceType,
+                            @RequestParam(value = "userId", required = false) Long userId,
+                            Model model) {
+        List<AuditLog> logs = auditService.filterLogs(action, resourceType, userId);
         model.addAttribute("logs", logs);
+        model.addAttribute("selectedAction", action);
+        model.addAttribute("selectedResource", resourceType);
+        model.addAttribute("selectedUserId", userId);
+        model.addAttribute("users", userService.findAllUsers());
         return "admin/audit-logs";
     }
 }

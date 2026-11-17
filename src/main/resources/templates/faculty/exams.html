@@ -49,9 +49,20 @@
                             <span th:text="${e.questions.size()}">5</span> Questions
                         </td>
                         <td>
-                            <div style="display: flex; gap: var(--space-2); align-items: center;">
+                            <div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap;">
+                                <!-- Edit Exam (DRAFT or PUBLISHED) -->
+                                <a th:if="${e.status.name() == 'DRAFT' or e.status.name() == 'PUBLISHED'}"
+                                   th:href="@{'/faculty/exams/' + ${e.id} + '/edit'}"
+                                   class="btn btn-secondary btn-sm">Edit</a>
+
+                                <!-- Publish Exam (DRAFT only) -->
+                                <form th:if="${e.status.name() == 'DRAFT'}"
+                                      th:action="@{'/faculty/exams/' + ${e.id} + '/publish'}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary btn-sm">Publish</button>
+                                </form>
+
                                 <!-- Toggle Open/Close Re-evaluation Form -->
-                                <form th:if="${e.status.name() != 'RE_EVALUATION_OPEN'}"
+                                <form th:if="${e.status.name() == 'PUBLISHED'}"
                                       th:action="@{'/faculty/exams/' + ${e.id} + '/status'}" method="post" style="display: inline;">
                                     <input type="hidden" name="status" value="RE_EVALUATION_OPEN">
                                     <button type="submit" class="btn btn-primary btn-sm">Open Re-eval</button>
@@ -63,6 +74,7 @@
                                     <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--color-warning);">Close Re-eval</button>
                                 </form>
 
+                                <a th:href="@{'/faculty/exams/' + ${e.id} + '/marks'}" class="btn btn-secondary btn-sm">Marks</a>
                                 <a th:href="@{/faculty/requests(examId=${e.id})}" class="btn btn-secondary btn-sm">Requests</a>
                                 <a th:href="@{/faculty/analytics(examId=${e.id})}" class="btn btn-secondary btn-sm">Analytics</a>
                             </div>

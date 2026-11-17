@@ -1,6 +1,11 @@
 package com.example.examreview.service;
 
 import com.example.examreview.entity.*;
+import com.example.examreview.exception.DuplicateRequestException;
+import com.example.examreview.exception.InvalidStateTransitionException;
+import com.example.examreview.exception.ResourceNotFoundException;
+import com.example.examreview.exception.UnauthorizedAccessException;
+import com.example.examreview.exception.ValidationException;
 import com.example.examreview.repository.QuestionMarkRepository;
 import com.example.examreview.repository.QuestionRepository;
 import com.example.examreview.repository.RecheckRequestRepository;
@@ -38,58 +43,64 @@ public class RecheckRequestService {
 
     @Transactional
     public RecheckRequest submitRequest(User student, Long examId, Long questionId, String reason) {
+        if (student == null || student.getRole() != Role.STUDENT) {
+            throw new UnauthorizedAccessException("Only enrolled students can submit re-evaluation requests.");
+        }
+
         if (reason == null || reason.trim().length() < 5) {
-            throw new IllegalArgumentException("A valid reason of at least 5 characters is required.");
+            throw new ValidationException("A clear and descriptive justification of at least 5 characters is required.");
         }
 
         Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalArgumentException("Question not found: " + questionId));
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found with ID: " + questionId));
 
         Exam exam = question.getExam();
         if (!exam.getId().equals(examId)) {
-            throw new IllegalArgumentException("Question does not belong to the specified examination.");
+            throw new ValidationException("Selected question does not belong to the specified examination.");
         }
 
-        // FR-09 (3): Verify exam re-evaluation window
+        // Validate examination status
         if (exam.getStatus() != ExamStatus.RE_EVALUATION_OPEN) {
-            throw new IllegalStateException("Re-evaluation is not currently open for this examination.");
+            throw new InvalidStateTransitionException("Re-evaluation window is not currently open for this examination. Current status: " + exam.getStatus());
         }
+
+        // Validate time window
         LocalDateTime now = LocalDateTime.now();
         if (exam.getReevaluationStart() != null && now.isBefore(exam.getReevaluationStart())) {
-            throw new IllegalStateException("Re-evaluation period has not started yet.");
+            throw new InvalidStateTransitionException("Re-evaluation window has not commenced yet. Starts: " + exam.getReevaluationStart());
         }
         if (exam.getReevaluationEnd() != null && now.isAfter(exam.getReevaluationEnd())) {
-            throw new IllegalStateException("Re-evaluation period has already ended.");
+            throw new InvalidStateTransitionException("Re-evaluation window has already concluded. Ended: " + exam.getReevaluationEnd());
         }
 
-        // FR-09 (2): Student associated with examination
+        // Student must be enrolled with results on record
         if (!studentResultRepository.existsByStudentIdAndExamId(student.getId(), examId)) {
-            throw new IllegalStateException("Student has no examination result on record for this exam.");
+            throw new UnauthorizedAccessException("Student has no examination result or enrollment on record for this exam.");
         }
 
-        // FR-09 (5): Valid mark exists for this question
+        // Valid mark entry must exist for this question
         if (!questionMarkRepository.existsByStudentIdAndQuestionId(student.getId(), questionId)) {
-            throw new IllegalStateException("No mark entry found for this student and question.");
+            throw new ValidationException("No evaluation mark entry found for this student and question.");
         }
 
-        // FR-10 & ADR-003: Duplicate check (Application level)
+        // Duplicate check (Application level check)
         if (recheckRequestRepository.existsByStudentIdAndExamIdAndQuestionId(student.getId(), examId, questionId)) {
-            throw new IllegalStateException("A re-evaluation request already exists for this question.");
+            throw new DuplicateRequestException("A re-evaluation request has already been submitted for this question.");
         }
 
-        // Persist with DB constraint safety
+        // Database constraint level safety (handles concurrent submissions)
         try {
             RecheckRequest request = new RecheckRequest(student, exam, question, reason.trim());
             request.setStatus(RequestStatus.SUBMITTED);
             RecheckRequest saved = recheckRequestRepository.saveAndFlush(request);
 
             auditService.log(student, "REQUEST_SUBMITTED",
-                    String.format("Submitted re-evaluation request for Question %d in exam '%s'",
-                            question.getQuestionNumber(), exam.getName()));
+                    String.format("Submitted re-evaluation request ID %d for Question %d in exam '%s'",
+                            saved.getId(), question.getQuestionNumber(), exam.getName()));
 
             return saved;
         } catch (DataIntegrityViolationException ex) {
-            throw new IllegalStateException("A re-evaluation request already exists for this question.", ex);
+            throw new DuplicateRequestException("A re-evaluation request already exists for this question (concurrent submission conflict).");
         }
     }
 
@@ -107,6 +118,20 @@ public class RecheckRequestService {
 
     public Optional<RecheckRequest> getRequestById(Long id) {
         return recheckRequestRepository.findById(id);
+    }
+
+    @Transactional
+    public RecheckRequest markUnderReview(Long requestId, User actor) {
+        RecheckRequest request = recheckRequestRepository.findById(requestId)
+                .orElseThrow(() -> new ResourceNotFoundException("Request not found with ID: " + requestId));
+
+        if (request.getStatus() == RequestStatus.SUBMITTED) {
+            request.setStatus(RequestStatus.UNDER_REVIEW);
+            recheckRequestRepository.save(request);
+            auditService.log(actor, "REQUEST_UNDER_REVIEW",
+                    String.format("Re-evaluation request ID %d is now UNDER_REVIEW by %s", requestId, actor != null ? actor.getName() : "System"));
+        }
+        return request;
     }
 
     public boolean hasExistingRequest(Long studentId, Long examId, Long questionId) {

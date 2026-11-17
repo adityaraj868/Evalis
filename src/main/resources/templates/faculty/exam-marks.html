@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'exams')}">
+<head>
+    <title>Exam Marks Management - Faculty</title>
+</head>
+<body>
+<section>
+    <div style="margin-bottom: var(--space-4);">
+        <a th:href="@{/faculty/exams}" style="color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none;">&larr; Back to Exams</a>
+    </div>
+
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Marks Management: <span th:text="${exam.name}">Exam</span></h1>
+            <p class="page-subtitle">Record and inspect student examination results and question-level marks breakdown</p>
+        </div>
+        <div th:replace="~{fragments/badges :: examStatus(${exam.status})}"></div>
+    </div>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+            <h2 class="card-title" style="margin-bottom: 0;">Enrolled Student Results (<span th:text="${students.size()}">0</span> Students)</h2>
+        </div>
+
+        <div class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Total Marks</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="st : ${students}">
+                        <td><strong th:text="${st.name}">Student Name</strong></td>
+                        <td th:text="${st.email}">Email</td>
+                        <td>
+                            <span th:if="${resultsMap.containsKey(st.id)}" style="font-weight: var(--font-weight-bold); color: var(--color-primary);">
+                                <span th:text="${resultsMap.get(st.id).totalMarks}">0.0</span> Marks
+                            </span>
+                            <span th:if="${!resultsMap.containsKey(st.id)}" style="color: var(--color-muted);">Not Entered</span>
+                        </td>
+                        <td>
+                            <span th:if="${resultsMap.containsKey(st.id)}" class="badge badge-success">Recorded</span>
+                            <span th:if="${!resultsMap.containsKey(st.id)}" class="badge badge-warning">Pending</span>
+                        </td>
+                        <td>
+                            <a th:href="@{'/faculty/exams/' + ${exam.id} + '/marks/student/' + ${st.id}}"
+                               class="btn btn-secondary btn-sm">Enter / Edit Marks</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -136,7 +136,7 @@ public class StudentController {
             RecheckRequest request = recheckRequestService.submitRequest(student, examId, questionId, reason);
             redirectAttributes.addFlashAttribute("successMessage", "Re-evaluation request submitted successfully!");
             return "redirect:/student/requests/" + request.getId();
-        } catch (IllegalArgumentException | IllegalStateException ex) {
+        } catch (RuntimeException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
             return "redirect:/student/exams/" + examId;
         }
@@ -172,5 +172,4 @@ public class StudentController {
 
         return "student/request-detail";
     }
-}
 }

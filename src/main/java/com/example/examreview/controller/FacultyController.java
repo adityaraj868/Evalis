@@ -1,6 +1,7 @@
 package com.example.examreview.controller;
 
 import com.example.examreview.entity.*;
+import com.example.examreview.exception.ResourceNotFoundException;
 import com.example.examreview.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,17 +21,20 @@ public class FacultyController {
     private final RecheckRequestService recheckRequestService;
     private final ReviewService reviewService;
     private final MarksService marksService;
+    private final AnalyticsService analyticsService;
 
     public FacultyController(UserService userService,
                              ExamService examService,
                              RecheckRequestService recheckRequestService,
                              ReviewService reviewService,
-                             MarksService marksService) {
+                             MarksService marksService,
+                             AnalyticsService analyticsService) {
         this.userService = userService;
         this.examService = examService;
         this.recheckRequestService = recheckRequestService;
         this.reviewService = reviewService;
         this.marksService = marksService;
+        this.analyticsService = analyticsService;
     }
 
     @GetMapping("/dashboard")
@@ -104,7 +108,7 @@ public class FacultyController {
     public String updateExamStatus(@PathVariable("id") Long examId,
                                    @RequestParam("status") ExamStatus status,
                                    RedirectAttributes redirectAttributes) {
-        User faculty = userService.getCurrentUser();
+        User faculty = userService.getRequiredCurrentUser();
         try {
             if (status == ExamStatus.RE_EVALUATION_OPEN) {
                 examService.openReevaluation(examId, LocalDateTime.now(), LocalDateTime.now().plusDays(7), faculty);
@@ -120,6 +124,129 @@ public class FacultyController {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
         }
         return "redirect:/faculty/exams";
+    }
+
+    @GetMapping("/exams/{id}/edit")
+    public String editExamForm(@PathVariable("id") Long examId, Model model) {
+        Exam exam = examService.getRequiredExamById(examId);
+        List<Question> questions = examService.getQuestionsForExam(examId);
+        model.addAttribute("exam", exam);
+        model.addAttribute("questions", questions);
+        return "faculty/exam-edit";
+    }
+
+    @PostMapping("/exams/{id}/edit")
+    public String updateExam(@PathVariable("id") Long examId,
+                             @RequestParam("name") String name,
+                             @RequestParam("subject") String subject,
+                             @RequestParam(value = "startDate", required = false) String startDateStr,
+                             @RequestParam(value = "endDate", required = false) String endDateStr,
+                             RedirectAttributes redirectAttributes) {
+        User faculty = userService.getRequiredCurrentUser();
+        try {
+            LocalDate startDate = (startDateStr != null && !startDateStr.isBlank()) ? LocalDate.parse(startDateStr) : null;
+            LocalDate endDate = (endDateStr != null && !endDateStr.isBlank()) ? LocalDate.parse(endDateStr) : null;
+            examService.updateExam(examId, name, subject, startDate, endDate, faculty);
+            redirectAttributes.addFlashAttribute("successMessage", "Examination details updated successfully!");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
+        return "redirect:/faculty/exams/" + examId + "/edit";
+    }
+
+    @PostMapping("/exams/{id}/publish")
+    public String publishExam(@PathVariable("id") Long examId, RedirectAttributes redirectAttributes) {
+        User faculty = userService.getRequiredCurrentUser();
+        try {
+            examService.publishExam(examId, faculty);
+            redirectAttributes.addFlashAttribute("successMessage", "Examination published successfully!");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
+        return "redirect:/faculty/exams";
+    }
+
+    @PostMapping("/exams/{id}/questions")
+    public String addQuestion(@PathVariable("id") Long examId,
+                              @RequestParam("questionText") String questionText,
+                              @RequestParam("maxMarks") Double maxMarks,
+                              RedirectAttributes redirectAttributes) {
+        User faculty = userService.getRequiredCurrentUser();
+        try {
+            examService.addQuestionToExam(examId, null, questionText, maxMarks, faculty);
+            redirectAttributes.addFlashAttribute("successMessage", "Question added successfully!");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
+        return "redirect:/faculty/exams/" + examId + "/edit";
+    }
+
+    @GetMapping("/exams/{id}/marks")
+    public String examMarks(@PathVariable("id") Long examId, Model model) {
+        Exam exam = examService.getRequiredExamById(examId);
+        List<User> students = userService.findAllStudents();
+        List<StudentResult> results = marksService.getExamResults(examId);
+
+        Map<Long, StudentResult> resultsMap = new HashMap<>();
+        for (StudentResult r : results) {
+            resultsMap.put(r.getStudent().getId(), r);
+        }
+
+        model.addAttribute("exam", exam);
+        model.addAttribute("students", students);
+        model.addAttribute("resultsMap", resultsMap);
+
+        return "faculty/exam-marks";
+    }
+
+    @GetMapping("/exams/{id}/marks/student/{studentId}")
+    public String studentMarksEdit(@PathVariable("id") Long examId,
+                                   @PathVariable("studentId") Long studentId,
+                                   Model model) {
+        Exam exam = examService.getRequiredExamById(examId);
+        User student = userService.findById(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + studentId));
+
+        List<Question> questions = examService.getQuestionsForExam(examId);
+        List<QuestionMark> marksList = marksService.getQuestionMarksForExam(studentId, examId);
+
+        Map<Long, Double> currentMarksMap = new HashMap<>();
+        for (QuestionMark qm : marksList) {
+            currentMarksMap.put(qm.getQuestion().getId(), qm.getMarksObtained());
+        }
+
+        model.addAttribute("exam", exam);
+        model.addAttribute("student", student);
+        model.addAttribute("questions", questions);
+        model.addAttribute("currentMarksMap", currentMarksMap);
+
+        return "faculty/student-marks-edit";
+    }
+
+    @PostMapping("/exams/{id}/marks/student/{studentId}")
+    public String saveStudentMarks(@PathVariable("id") Long examId,
+                                   @PathVariable("studentId") Long studentId,
+                                   @RequestParam Map<String, String> allParams,
+                                   RedirectAttributes redirectAttributes) {
+        User faculty = userService.getRequiredCurrentUser();
+        try {
+            Map<Long, Double> questionMarks = new HashMap<>();
+            for (Map.Entry<String, String> entry : allParams.entrySet()) {
+                String key = entry.getKey();
+                if (key.startsWith("questionMarks[") && key.endsWith("]")) {
+                    String qIdStr = key.substring("questionMarks[".length(), key.length() - 1);
+                    Long qId = Long.parseLong(qIdStr);
+                    Double mark = Double.parseDouble(entry.getValue());
+                    questionMarks.put(qId, mark);
+                }
+            }
+
+            marksService.recordExamMarksForStudent(examId, studentId, questionMarks, faculty);
+            redirectAttributes.addFlashAttribute("successMessage", "Student marks updated successfully!");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
+        return "redirect:/faculty/exams/" + examId + "/marks";
     }
 
     @GetMapping("/requests")
@@ -142,14 +269,16 @@ public class FacultyController {
     }
 
     @GetMapping("/requests/{id}")
-    public String reviewRequest(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
-        Optional<RecheckRequest> requestOpt = recheckRequestService.getRequestById(id);
-        if (requestOpt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Request not found.");
-            return "redirect:/faculty/requests";
+    public String reviewRequest(@PathVariable("id") Long id, Model model) {
+        User faculty = userService.getRequiredCurrentUser();
+        RecheckRequest request = recheckRequestService.getRequestById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Request not found with ID: " + id));
+
+        // Automatically transition SUBMITTED to UNDER_REVIEW upon faculty opening
+        if (request.getStatus() == RequestStatus.SUBMITTED) {
+            request = recheckRequestService.markUnderReview(id, faculty);
         }
 
-        RecheckRequest request = requestOpt.get();
         Optional<QuestionMark> markOpt = marksService.getQuestionMark(request.getStudent().getId(), request.getQuestion().getId());
 
         model.addAttribute("req", request);
@@ -165,12 +294,12 @@ public class FacultyController {
                                @RequestParam(value = "revisedMarks", required = false) Double revisedMarks,
                                @RequestParam(value = "comments", required = false) String comments,
                                RedirectAttributes redirectAttributes) {
-        User faculty = userService.getCurrentUser();
+        User faculty = userService.getRequiredCurrentUser();
         try {
             reviewService.processReview(id, faculty, decision, comments, revisedMarks);
             redirectAttributes.addFlashAttribute("successMessage", "Review decision recorded successfully!");
             return "redirect:/faculty/requests/" + id;
-        } catch (IllegalArgumentException | IllegalStateException ex) {
+        } catch (RuntimeException ex) {
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
             return "redirect:/faculty/requests/" + id;
         }
@@ -180,6 +309,7 @@ public class FacultyController {
     public String analytics(@RequestParam(value = "examId", required = false) Long examId,
                             @RequestParam(value = "threshold", defaultValue = "30") int threshold,
                             Model model) {
+        User faculty = userService.getRequiredCurrentUser();
         List<Exam> exams = examService.getAllExams();
         Exam selectedExam = null;
 
@@ -189,19 +319,10 @@ public class FacultyController {
             selectedExam = exams.get(0);
         }
 
-        List<QuestionStat> questionStats = new ArrayList<>();
+        List<com.example.examreview.dto.QuestionAnalyticsDto> questionStats = new ArrayList<>();
         if (selectedExam != null) {
-            List<Question> questions = examService.getQuestionsForExam(selectedExam.getId());
-            Map<Long, Long> countsMap = recheckRequestService.getQuestionRequestCounts(selectedExam.getId());
-            long totalStudents = userService.findAllStudents().size();
-            long totalExamStudents = totalStudents > 0 ? totalStudents : 1; // Cohort size
-
-            for (Question q : questions) {
-                long count = countsMap.getOrDefault(q.getId(), 0L);
-                double percentage = ((double) count / totalExamStudents) * 100.0;
-                boolean isFlagged = percentage >= threshold;
-                questionStats.add(new QuestionStat(q, count, percentage, isFlagged));
-            }
+            com.example.examreview.dto.ExamAnalyticsDto analyticsDto = analyticsService.getExamAnalytics(selectedExam.getId(), threshold, faculty);
+            questionStats = analyticsDto.getQuestionStats();
         }
 
         model.addAttribute("exams", exams);
@@ -210,25 +331,5 @@ public class FacultyController {
         model.addAttribute("stats", questionStats);
 
         return "faculty/analytics";
-    }
-
-    // Helper DTO for analytics view
-    public static class QuestionStat {
-        private final Question question;
-        private final long requestCount;
-        private final double percentage;
-        private final boolean flagged;
-
-        public QuestionStat(Question question, long requestCount, double percentage, boolean flagged) {
-            this.question = question;
-            this.requestCount = requestCount;
-            this.percentage = percentage;
-            this.flagged = flagged;
-        }
-
-        public Question getQuestion() { return question; }
-        public long getRequestCount() { return requestCount; }
-        public double getPercentage() { return percentage; }
-        public boolean isFlagged() { return flagged; }
     }
 }

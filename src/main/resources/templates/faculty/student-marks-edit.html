@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'exams')}">
+<head>
+    <title>Record Marks - Faculty</title>
+</head>
+<body>
+<section>
+    <div style="margin-bottom: var(--space-4);">
+        <a th:href="@{'/faculty/exams/' + ${exam.id} + '/marks'}" style="color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none;">&larr; Back to Exam Marks</a>
+    </div>
+
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div class="card">
+            <div class="page-header" style="border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-4);">
+                <h1 class="page-title">Record Marks</h1>
+                <p class="page-subtitle">
+                    Student: <strong th:text="${student.name}">Student Name</strong> (<span th:text="${student.email}">Email</span>)
+                    &bull; Exam: <strong th:text="${exam.name}">Exam</strong>
+                </p>
+            </div>
+
+            <form th:action="@{'/faculty/exams/' + ${exam.id} + '/marks/student/' + ${student.id}}" method="post">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Q. No.</th>
+                                <th>Question Statement</th>
+                                <th style="width: 120px;">Max Marks</th>
+                                <th style="width: 160px;">Marks Obtained</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="q : ${questions}">
+                                <td><strong>Q<span th:text="${q.questionNumber}">1</span></strong></td>
+                                <td th:text="${q.questionText}">Question Statement</td>
+                                <td><span th:text="${q.maxMarks}">10.0</span></td>
+                                <td>
+                                    <input type="number" step="0.5" min="0" th:max="${q.maxMarks}"
+                                           th:name="'questionMarks[' + ${q.id} + ']'"
+                                           th:value="${currentMarksMap.containsKey(q.id) ? currentMarksMap.get(q.id) : 0.0}"
+                                           class="form-control" required style="width: 130px;">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display: flex; gap: var(--space-3); margin-top: var(--space-4);">
+                    <button type="submit" class="btn btn-primary">Save Marks</button>
+                    <a th:href="@{'/faculty/exams/' + ${exam.id} + '/marks'}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

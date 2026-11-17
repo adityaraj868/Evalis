@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'exams')}">
+<head>
+    <title>Edit Examination - Faculty</title>
+</head>
+<body>
+<section>
+    <div style="margin-bottom: var(--space-4);">
+        <a th:href="@{/faculty/exams}" style="color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none;">&larr; Back to Exams</a>
+    </div>
+
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div class="card">
+            <div class="page-header" style="border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-4); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 class="page-title">Edit Examination</h1>
+                    <p class="page-subtitle">Update examination details and manage configured questions</p>
+                </div>
+                <div>
+                    <div th:replace="~{fragments/badges :: examStatus(${exam.status})}"></div>
+                </div>
+            </div>
+
+            <!-- Edit Exam Details Form -->
+            <form th:action="@{'/faculty/exams/' + ${exam.id} + '/edit'}" method="post">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Examination Title <span style="color: var(--color-danger);">*</span></label>
+                        <input type="text" id="name" name="name" class="form-control" th:value="${exam.name}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="form-label">Subject Code / Name <span style="color: var(--color-danger);">*</span></label>
+                        <input type="text" id="subject" name="subject" class="form-control" th:value="${exam.subject}" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                    <div class="form-group">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" id="startDate" name="startDate" class="form-control" th:value="${exam.startDate}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" id="endDate" name="endDate" class="form-control" th:value="${exam.endDate}">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: var(--space-3); margin-top: var(--space-4);">
+                    <button type="submit" class="btn btn-primary">Save Exam Changes</button>
+                    <a th:href="@{/faculty/exams}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+
+            <!-- Configured Questions Section -->
+            <div style="margin-top: var(--space-6); border-top: 1px solid var(--color-border); padding-top: var(--space-6);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+                    <h2 class="card-title" style="margin-bottom: 0;">Configured Questions (<span th:text="${questions.size()}">0</span>)</h2>
+                </div>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Q. No.</th>
+                                <th>Question Statement</th>
+                                <th style="width: 120px;">Max Marks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="q : ${questions}">
+                                <td><strong>Q<span th:text="${q.questionNumber}">1</span></strong></td>
+                                <td th:text="${q.questionText}">Question text</td>
+                                <td><span th:text="${q.maxMarks}">10.0</span></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(questions)}">
+                                <td colspan="3" style="text-align: center; color: var(--color-muted);">No questions added yet.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Add Question Form if in DRAFT or PUBLISHED -->
+                <div th:if="${exam.status.name() == 'DRAFT' or exam.status.name() == 'PUBLISHED'}" style="margin-top: var(--space-6); background: var(--color-surface-hover); padding: var(--space-4); border-radius: var(--radius-md);">
+                    <h3 style="font-size: var(--font-size-md); font-weight: var(--font-weight-semibold); margin-bottom: var(--space-3);">Add New Question</h3>
+                    <form th:action="@{'/faculty/exams/' + ${exam.id} + '/questions'}" method="post">
+                        <div style="display: grid; grid-template-columns: 1fr 140px; gap: var(--space-3); margin-bottom: var(--space-3);">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Question Statement</label>
+                                <textarea name="questionText" rows="2" class="form-control" placeholder="Enter question statement..." required></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Max Marks</label>
+                                <input type="number" step="0.5" name="maxMarks" value="10.0" class="form-control" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-sm">+ Add Question</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

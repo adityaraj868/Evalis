@@ -11,9 +11,58 @@
         <p class="page-subtitle">Immutable log of security events, marks revisions, examination lifecycle updates, and review decisions</p>
     </div>
 
+    <!-- Filters Card -->
+    <div class="card" style="padding: var(--space-4); margin-bottom: var(--space-6);">
+        <form th:action="@{/admin/audit-logs}" method="get" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4);">
+            <div style="flex: 1; min-width: 180px;">
+                <label for="action" class="form-label">Filter Action</label>
+                <select name="action" id="action" class="form-control" onchange="this.form.submit()">
+                    <option value="ALL">All Actions</option>
+                    <option value="EXAM_CREATED" th:selected="${selectedAction == 'EXAM_CREATED'}">EXAM_CREATED</option>
+                    <option value="EXAM_PUBLISHED" th:selected="${selectedAction == 'EXAM_PUBLISHED'}">EXAM_PUBLISHED</option>
+                    <option value="REEVALUATION_OPENED" th:selected="${selectedAction == 'REEVALUATION_OPENED'}">REEVALUATION_OPENED</option>
+                    <option value="REEVALUATION_CLOSED" th:selected="${selectedAction == 'REEVALUATION_CLOSED'}">REEVALUATION_CLOSED</option>
+                    <option value="MARK_RECORDED" th:selected="${selectedAction == 'MARK_RECORDED'}">MARK_RECORDED</option>
+                    <option value="MARKS_REVISED" th:selected="${selectedAction == 'MARKS_REVISED'}">MARKS_REVISED</option>
+                    <option value="REQUEST_SUBMITTED" th:selected="${selectedAction == 'REQUEST_SUBMITTED'}">REQUEST_SUBMITTED</option>
+                    <option value="REQUEST_UNDER_REVIEW" th:selected="${selectedAction == 'REQUEST_UNDER_REVIEW'}">REQUEST_UNDER_REVIEW</option>
+                    <option value="REVIEW_COMPLETED" th:selected="${selectedAction == 'REVIEW_COMPLETED'}">REVIEW_COMPLETED</option>
+                </select>
+            </div>
+
+            <div style="flex: 1; min-width: 180px;">
+                <label for="resourceType" class="form-label">Filter Resource</label>
+                <select name="resourceType" id="resourceType" class="form-control" onchange="this.form.submit()">
+                    <option value="ALL">All Resources</option>
+                    <option value="EXAM" th:selected="${selectedResource == 'EXAM'}">EXAM</option>
+                    <option value="QUESTION" th:selected="${selectedResource == 'QUESTION'}">QUESTION</option>
+                    <option value="MARKS" th:selected="${selectedResource == 'MARKS'}">MARKS</option>
+                    <option value="REQUEST" th:selected="${selectedResource == 'REQUEST'}">REQUEST</option>
+                    <option value="REVIEW" th:selected="${selectedResource == 'REVIEW'}">REVIEW</option>
+                </select>
+            </div>
+
+            <div style="flex: 1; min-width: 200px;">
+                <label for="userId" class="form-label">Filter User</label>
+                <select name="userId" id="userId" class="form-control" onchange="this.form.submit()">
+                    <option value="">All Users</option>
+                    <option th:each="u : ${users}"
+                            th:value="${u.id}"
+                            th:text="${u.name} + ' (' + ${u.role} + ')'"
+                            th:selected="${selectedUserId != null and selectedUserId == u.id}">User</option>
+                </select>
+            </div>
+
+            <div>
+                <a th:href="@{/admin/audit-logs}" class="btn btn-secondary">Reset Filters</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Audit Log Table -->
     <div class="card">
         <div th:if="${#lists.isEmpty(logs)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
-            No audit records recorded yet.
+            No audit records match the selected filter criteria.
         </div>
 
         <div th:if="${!#lists.isEmpty(logs)}" class="table-container" style="margin-bottom: 0;">
@@ -23,6 +72,7 @@
                         <th style="width: 170px;">Timestamp</th>
                         <th style="width: 180px;">Actor</th>
                         <th style="width: 170px;">Action</th>
+                        <th style="width: 130px;">Resource</th>
                         <th>Details</th>
                     </tr>
                 </thead>
@@ -36,7 +86,18 @@
                         <td>
                             <span class="badge" style="background: var(--color-surface-hover); color: var(--color-primary);" th:text="${l.action}">ACTION</span>
                         </td>
-                        <td th:text="${l.description}">Audit description</td>
+                        <td>
+                            <span th:if="${l.resourceType != null}" class="badge" style="background: var(--color-surface-hover); color: var(--color-muted);"
+                                  th:text="${l.resourceType} + (${l.resourceId != null} ? ' #' + ${l.resourceId} : '')">RESOURCE</span>
+                            <span th:if="${l.resourceType == null}" style="color: var(--color-muted); font-size: var(--font-size-xs);">-</span>
+                        </td>
+                        <td>
+                            <span th:text="${l.description}">Audit description</span>
+                            <div th:if="${l.previousValue != null or l.updatedValue != null}" style="font-size: var(--font-size-xs); margin-top: var(--space-1); color: var(--color-muted);">
+                                <span th:if="${l.previousValue != null}">Prev: <span th:text="${l.previousValue}"></span></span>
+                                <span th:if="${l.updatedValue != null}" style="margin-left: var(--space-2);">New: <span th:text="${l.updatedValue}"></span></span>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
