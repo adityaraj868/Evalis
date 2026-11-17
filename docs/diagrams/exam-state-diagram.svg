@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320" font-family="Arial, sans-serif">
+  <rect width="900" height="320" fill="#F8FAFC" rx="8"/>
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1A202C">Examination Lifecycle State Diagram</text>
+
+  <!-- Start -->
+  <circle cx="50" cy="140" r="14" fill="#2B6CB0"/>
+  <line x1="64" y1="140" x2="110" y2="140" stroke="#4A5568" stroke-width="2"/>
+
+  <!-- DRAFT -->
+  <rect x="110" y="115" width="110" height="50" rx="8" fill="#EDF2F7" stroke="#4A5568" stroke-width="2"/>
+  <text x="165" y="145" text-anchor="middle" font-weight="bold">DRAFT</text>
+
+  <line x1="220" y1="140" x2="280" y2="140" stroke="#4A5568" stroke-width="2"/>
+  <text x="250" y="130" text-anchor="middle" font-size="10" fill="#4A5568">Publish</text>
+
+  <!-- PUBLISHED -->
+  <rect x="280" y="115" width="125" height="50" rx="8" fill="#EBF8FF" stroke="#3182CE" stroke-width="2"/>
+  <text x="342" y="145" text-anchor="middle" font-weight="bold" fill="#2B6CB0">PUBLISHED</text>
+
+  <line x1="405" y1="140" x2="475" y2="140" stroke="#4A5568" stroke-width="2"/>
+  <text x="440" y="130" text-anchor="middle" font-size="10" fill="#4A5568">Window Opens</text>
+
+  <!-- RE_EVALUATION_OPEN -->
+  <rect x="475" y="110" width="170" height="60" rx="8" fill="#E6FFFA" stroke="#319795" stroke-width="2"/>
+  <text x="560" y="137" text-anchor="middle" font-weight="bold" fill="#234E52">RE_EVALUATION</text>
+  <text x="560" y="155" text-anchor="middle" font-weight="bold" fill="#234E52">_OPEN</text>
+
+  <line x1="645" y1="140" x2="710" y2="140" stroke="#4A5568" stroke-width="2"/>
+  <text x="677" y="130" text-anchor="middle" font-size="10" fill="#4A5568">Window Closes</text>
+
+  <!-- RE_EVALUATION_CLOSED -->
+  <rect x="710" y="110" width="160" height="60" rx="8" fill="#FFF5F5" stroke="#E53E3E" stroke-width="2"/>
+  <text x="790" y="137" text-anchor="middle" font-weight="bold" fill="#9B2C2C">RE_EVALUATION</text>
+  <text x="790" y="155" text-anchor="middle" font-weight="bold" fill="#9B2C2C">_CLOSED</text>
+
+  <!-- Transition to ARCHIVED below -->
+  <path d="M 790 170 L 790 230 L 400 230" fill="none" stroke="#4A5568" stroke-width="2"/>
+  <text x="600" y="222" font-size="10" fill="#4A5568">Semester Concludes</text>
+
+  <!-- ARCHIVED -->
+  <rect x="290" y="205" width="110" height="50" rx="8" fill="#EDF2F7" stroke="#718096" stroke-width="2"/>
+  <text x="345" y="235" text-anchor="middle" font-weight="bold" fill="#4A5568">ARCHIVED</text>
+
+  <line x1="290" y1="230" x2="230" y2="230" stroke="#4A5568" stroke-width="2"/>
+  <circle cx="215" cy="230" r="8" fill="#1A202C"/>
+  <circle cx="215" cy="230" r="12" fill="none" stroke="#1A202C" stroke-width="1.5"/>
+</svg>

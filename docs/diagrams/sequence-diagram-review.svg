@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 560" width="950" height="560" font-family="Arial, sans-serif">
+  <rect width="950" height="560" fill="#F8FAFC" rx="8"/>
+  <text x="475" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#1A202C">Sequence Diagram: Faculty Review and Mark Revision</text>
+
+  <!-- Lifeline headers -->
+  <g font-size="12" font-weight="bold" fill="#FFF" text-anchor="middle">
+    <rect x="30" y="55" width="120" height="30" rx="4" fill="#234E52"/><text x="90" y="75">Faculty</text>
+    <rect x="180" y="55" width="140" height="30" rx="4" fill="#234E52"/><text x="250" y="75">FacultyController</text>
+    <rect x="360" y="55" width="130" height="30" rx="4" fill="#553C9A"/><text x="425" y="75">ReviewService</text>
+    <rect x="530" y="55" width="130" height="30" rx="4" fill="#B7791F"/><text x="595" y="75">MarksService</text>
+    <rect x="700" y="55" width="130" height="30" rx="4" fill="#2B6CB0"/><text x="765" y="75">Repositories</text>
+    <rect x="850" y="55" width="90" height="30" rx="4" fill="#4A5568"/><text x="895" y="75">Audit</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="90" y1="85" x2="90" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="250" y1="85" x2="250" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="425" y1="85" x2="425" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="595" y1="85" x2="595" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="765" y1="85" x2="765" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="895" y1="85" x2="895" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+
+  <!-- Messages -->
+  <line x1="90" y1="120" x2="250" y2="120" stroke="#234E52" stroke-width="1.5"/>
+  <text x="100" y="112" font-size="11" fill="#234E52">POST /faculty/requests/{id}/review (APPROVED, revisedMarks=7.0)</text>
+
+  <line x1="250" y1="150" x2="425" y2="150" stroke="#553C9A" stroke-width="1.5"/>
+  <text x="260" y="142" font-size="11" fill="#553C9A">submitReview(requestId, faculty, APPROVED, 7.0, remarks)</text>
+
+  <line x1="425" y1="180" x2="765" y2="180" stroke="#2B6CB0" stroke-width="1.5"/>
+  <text x="440" y="172" font-size="11" fill="#2B6CB0">recheckRequestRepository.findById(requestId)</text>
+
+  <line x1="765" y1="210" x2="425" y2="210" stroke="#2B6CB0" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="460" y="204" font-size="11" fill="#718096">return request</text>
+
+  <!-- Delegate to MarksService -->
+  <line x1="425" y1="250" x2="595" y2="250" stroke="#B7791F" stroke-width="1.5"/>
+  <text x="440" y="242" font-size="11" fill="#B7791F">recordMark(student, question, 7.0)</text>
+
+  <!-- MarksService updates DB and rolls up total -->
+  <line x1="595" y1="280" x2="765" y2="280" stroke="#B7791F" stroke-width="1.5"/>
+  <text x="605" y="272" font-size="11" fill="#B7791F">save QuestionMark &amp; recalc StudentResult.totalMarks</text>
+
+  <line x1="765" y1="310" x2="595" y2="310" stroke="#B7791F" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="640" y="304" font-size="11" fill="#718096">updated marks saved</text>
+
+  <!-- Save Review -->
+  <line x1="425" y1="350" x2="765" y2="350" stroke="#2B6CB0" stroke-width="1.5"/>
+  <text x="440" y="342" font-size="11" fill="#2B6CB0">reviewRepository.save(new Review(...))</text>
+
+  <!-- Log Audit -->
+  <line x1="425" y1="390" x2="895" y2="390" stroke="#4A5568" stroke-width="1.5"/>
+  <text x="450" y="382" font-size="11" fill="#4A5568">auditService.log(faculty, "REVIEW_COMPLETED", details)</text>
+
+  <line x1="425" y1="430" x2="250" y2="430" stroke="#553C9A" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="270" y="422" font-size="11" fill="#553C9A">return saved Review</text>
+
+  <line x1="250" y1="470" x2="90" y2="470" stroke="#234E52" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="100" y="462" font-size="11" fill="#234E52">Redirect /faculty/requests + flash: "Review completed successfully"</text>
+</svg>

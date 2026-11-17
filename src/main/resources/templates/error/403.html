@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'error')}">
+<head>
+    <title>Access Denied - 403</title>
+</head>
+<body>
+<section>
+    <div style="max-width: 600px; margin: var(--space-8) auto; text-align: center;">
+        <div class="card">
+            <div style="font-size: 3rem; margin-bottom: var(--space-2);">🔒</div>
+            <h1 class="page-title" style="color: var(--color-danger);">Access Denied (403)</h1>
+            <p class="page-subtitle" style="margin-bottom: var(--space-6);">
+                You do not have authorization to access this protected resource.
+            </p>
+            <p style="color: var(--color-text-secondary); margin-bottom: var(--space-6);">
+                If you believe this is in error, please contact your administrator or sign in with an account having the proper role.
+            </p>
+            <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

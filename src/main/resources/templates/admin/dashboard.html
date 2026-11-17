@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'admin-dashboard')}">
+<head>
+    <title>Admin Dashboard - Exam Review Portal</title>
+</head>
+<body>
+<section>
+    <div class="page-header">
+        <h1 class="page-title">Administration Dashboard</h1>
+        <p class="page-subtitle">System-wide monitoring, user registry, and compliance audit trail</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Registered Students
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
+                 th:text="${studentCount}">2</div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Faculty Staff
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
+                 th:text="${facultyCount}">1</div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Total Examinations
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
+                 th:text="${examCount}">1</div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Re-evaluation Requests
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-warning); margin-top: var(--space-1);"
+                 th:text="${requestCount}">1</div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div style="display: flex; gap: var(--space-4); margin-bottom: var(--space-6);">
+        <a th:href="@{/admin/students}" class="btn btn-secondary">Manage Students Registry</a>
+        <a th:href="@{/admin/audit-logs}" class="btn btn-secondary">View Full Audit Trail</a>
+    </div>
+
+    <!-- Recent Audit Activity -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+            <h2 class="card-title" style="margin-bottom: 0;">Recent Audit Trail</h2>
+            <a th:href="@{/admin/audit-logs}" class="btn btn-secondary btn-sm">All Logs</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(recentLogs)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
+            No audit records found.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(recentLogs)}" class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 170px;">Timestamp</th>
+                        <th style="width: 180px;">Actor</th>
+                        <th style="width: 160px;">Action</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="l : ${recentLogs}">
+                        <td th:text="${#temporals.format(l.timestamp, 'dd MMM yyyy HH:mm:ss')}">Time</td>
+                        <td>
+                            <strong th:text="${l.user != null ? l.user.name : 'SYSTEM'}">Actor</strong>
+                            <span th:if="${l.user != null}" style="font-size: var(--font-size-xs); color: var(--color-muted);" th:text="'(' + ${l.user.role} + ')'"></span>
+                        </td>
+                        <td>
+                            <span class="badge" style="background: var(--color-surface-hover); color: var(--color-primary);" th:text="${l.action}">ACTION</span>
+                        </td>
+                        <td th:text="${l.description}">Description</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

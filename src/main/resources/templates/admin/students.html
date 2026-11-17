@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'students')}">
+<head>
+    <title>Student Registry - Admin</title>
+</head>
+<body>
+<section>
+    <div class="page-header">
+        <h1 class="page-title">Student Registry</h1>
+        <p class="page-subtitle">Directory of registered students eligible for examinations and re-evaluations</p>
+    </div>
+
+    <div class="card">
+        <div th:if="${#lists.isEmpty(students)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
+            No students found in registry.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(students)}" class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student Name</th>
+                        <th>Email Address</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Registered Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="s : ${students}">
+                        <td>#<span th:text="${s.id}">1</span></td>
+                        <td><strong th:text="${s.name}">John Student</strong></td>
+                        <td th:text="${s.email}">student@example.com</td>
+                        <td><span class="badge" style="background: var(--color-surface-hover);" th:text="${s.role}">STUDENT</span></td>
+                        <td>
+                            <span th:if="${s.active}" class="badge badge-approved">Active</span>
+                            <span th:if="${!s.active}" class="badge badge-rejected">Inactive</span>
+                        </td>
+                        <td th:text="${#temporals.format(s.createdAt, 'dd MMM yyyy HH:mm')}">Date</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 750" width="1050" height="750" font-family="monospace" font-size="11">
+  <rect width="1050" height="750" fill="#F8FAFC" rx="8"/>
+  <text x="525" y="28" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1A202C">UML Class Diagram — Domain Model Entities</text>
+
+  <!-- User Class -->
+  <g transform="translate(40, 50)">
+    <rect width="210" height="150" fill="#FFF" stroke="#2B6CB0" stroke-width="1.5" rx="4"/>
+    <rect width="210" height="28" fill="#2B6CB0" rx="4"/>
+    <text x="105" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">User</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- name: String</text>
+    <text x="10" y="82" fill="#2D3748">- email: String [UK]</text>
+    <text x="10" y="99" fill="#2D3748">- passwordHash: String</text>
+    <text x="10" y="116" fill="#2D3748">- role: Role</text>
+    <text x="10" y="133" fill="#2D3748">- createdAt: LocalDateTime</text>
+  </g>
+
+  <!-- Role Enum -->
+  <g transform="translate(40, 230)">
+    <rect width="210" height="85" fill="#FFF" stroke="#4A5568" stroke-width="1.5" rx="4"/>
+    <rect width="210" height="24" fill="#4A5568" rx="4"/>
+    <text x="105" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">&lt;&lt;enum&gt;&gt; Role</text>
+    <text x="10" y="44" fill="#2D3748">+ STUDENT</text>
+    <text x="10" y="60" fill="#2D3748">+ FACULTY</text>
+    <text x="10" y="76" fill="#2D3748">+ ADMIN</text>
+  </g>
+
+  <!-- Exam Class -->
+  <g transform="translate(380, 50)">
+    <rect width="270" height="175" fill="#FFF" stroke="#234E52" stroke-width="1.5" rx="4"/>
+    <rect width="270" height="28" fill="#234E52" rx="4"/>
+    <text x="135" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">Exam</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- name: String</text>
+    <text x="10" y="82" fill="#2D3748">- subject: String</text>
+    <text x="10" y="99" fill="#2D3748">- examDate: LocalDate</text>
+    <text x="10" y="116" fill="#2D3748">- reevaluationStart: LocalDateTime</text>
+    <text x="10" y="133" fill="#2D3748">- reevaluationEnd: LocalDateTime</text>
+    <text x="10" y="150" fill="#2D3748">- status: ExamStatus</text>
+    <text x="10" y="167" fill="#2D3748">- questions: List&amp;lt;Question&amp;gt;</text>
+  </g>
+
+  <!-- Question Class -->
+  <g transform="translate(750, 50)">
+    <rect width="250" height="150" fill="#FFF" stroke="#553C9A" stroke-width="1.5" rx="4"/>
+    <rect width="250" height="28" fill="#553C9A" rx="4"/>
+    <text x="125" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">Question</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- exam: Exam</text>
+    <text x="10" y="82" fill="#2D3748">- questionNumber: Integer</text>
+    <text x="10" y="99" fill="#2D3748">- description: String</text>
+    <text x="10" y="116" fill="#2D3748">- maxMarks: Double</text>
+    <text x="10" y="133" fill="#2D3748">- createdAt: LocalDateTime</text>
+  </g>
+
+  <!-- QuestionMark Class -->
+  <g transform="translate(750, 280)">
+    <rect width="250" height="135" fill="#FFF" stroke="#B7791F" stroke-width="1.5" rx="4"/>
+    <rect width="250" height="28" fill="#B7791F" rx="4"/>
+    <text x="125" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">QuestionMark</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- student: User</text>
+    <text x="10" y="82" fill="#2D3748">- question: Question</text>
+    <text x="10" y="99" fill="#2D3748">- marksObtained: Double</text>
+    <text x="10" y="116" fill="#2D3748">- updatedAt: LocalDateTime</text>
+  </g>
+
+  <!-- StudentResult Class -->
+  <g transform="translate(40, 480)">
+    <rect width="230" height="140" fill="#FFF" stroke="#C53030" stroke-width="1.5" rx="4"/>
+    <rect width="230" height="28" fill="#C53030" rx="4"/>
+    <text x="115" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">StudentResult</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- student: User</text>
+    <text x="10" y="82" fill="#2D3748">- exam: Exam</text>
+    <text x="10" y="99" fill="#2D3748">- totalMarks: Double</text>
+    <text x="10" y="116" fill="#2D3748">- updatedAt: LocalDateTime</text>
+  </g>
+
+  <!-- RecheckRequest Class -->
+  <g transform="translate(380, 280)">
+    <rect width="280" height="185" fill="#FFF" stroke="#2B6CB0" stroke-width="1.5" rx="4"/>
+    <rect width="280" height="28" fill="#2B6CB0" rx="4"/>
+    <text x="140" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">RecheckRequest</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- student: User</text>
+    <text x="10" y="82" fill="#2D3748">- exam: Exam</text>
+    <text x="10" y="99" fill="#2D3748">- question: Question</text>
+    <text x="10" y="116" fill="#2D3748">- reason: String</text>
+    <text x="10" y="133" fill="#2D3748">- status: RequestStatus</text>
+    <text x="10" y="150" fill="#2D3748">- reviews: List&amp;lt;Review&amp;gt;</text>
+    <text x="10" y="167" fill="#2D3748">- createdAt: LocalDateTime</text>
+  </g>
+
+  <!-- Review Class -->
+  <g transform="translate(380, 520)">
+    <rect width="280" height="170" fill="#FFF" stroke="#234E52" stroke-width="1.5" rx="4"/>
+    <rect width="280" height="28" fill="#234E52" rx="4"/>
+    <text x="140" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">Review</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- request: RecheckRequest</text>
+    <text x="10" y="82" fill="#2D3748">- reviewer: User</text>
+    <text x="10" y="99" fill="#2D3748">- decision: ReviewDecision</text>
+    <text x="10" y="116" fill="#2D3748">- previousMarks: Double</text>
+    <text x="10" y="133" fill="#2D3748">- revisedMarks: Double</text>
+    <text x="10" y="150" fill="#2D3748">- remarks: String</text>
+    <text x="10" y="167" fill="#2D3748">- reviewedAt: LocalDateTime</text>
+  </g>
+
+  <!-- AuditLog Class -->
+  <g transform="translate(750, 480)">
+    <rect width="250" height="140" fill="#FFF" stroke="#4A5568" stroke-width="1.5" rx="4"/>
+    <rect width="250" height="28" fill="#4A5568" rx="4"/>
+    <text x="125" y="19" text-anchor="middle" fill="#FFF" font-weight="bold">AuditLog</text>
+    <text x="10" y="48" fill="#2D3748">- id: Long</text>
+    <text x="10" y="65" fill="#2D3748">- user: User</text>
+    <text x="10" y="82" fill="#2D3748">- action: String</text>
+    <text x="10" y="99" fill="#2D3748">- details: String</text>
+    <text x="10" y="116" fill="#2D3748">- timestamp: LocalDateTime</text>
+  </g>
+
+  <!-- Association lines -->
+  <!-- Exam 1 to * Question -->
+  <line x1="650" y1="110" x2="750" y2="110" stroke="#4A5568" stroke-width="1.5"/>
+  <text x="660" y="105">1</text><text x="735" y="105">1..*</text>
+
+  <!-- Question 1 to * QuestionMark -->
+  <line x1="875" y1="200" x2="875" y2="280" stroke="#4A5568" stroke-width="1.5"/>
+  <text x="880" y="220">1</text><text x="880" y="270">*</text>
+
+  <!-- RecheckRequest 1 to * Review -->
+  <line x1="520" y1="465" x2="520" y2="520" stroke="#4A5568" stroke-width="1.5"/>
+  <text x="525" y="485">1</text><text x="525" y="510">0..*</text>
+
+  <!-- User 1 to * RecheckRequest -->
+  <line x1="250" y1="125" x2="380" y2="350" stroke="#4A5568" stroke-width="1.5"/>
+  <text x="260" y="145">1</text><text x="360" y="340">*</text>
+</svg>

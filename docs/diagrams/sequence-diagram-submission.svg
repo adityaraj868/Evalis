@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 560" width="950" height="560" font-family="Arial, sans-serif">
+  <rect width="950" height="560" fill="#F8FAFC" rx="8"/>
+  <text x="475" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#1A202C">Sequence Diagram: Student Re-evaluation Request Submission</text>
+
+  <!-- Lifeline headers -->
+  <g font-size="12" font-weight="bold" fill="#FFF" text-anchor="middle">
+    <rect x="30" y="55" width="120" height="30" rx="4" fill="#2B6CB0"/><text x="90" y="75">Student</text>
+    <rect x="180" y="55" width="140" height="30" rx="4" fill="#2B6CB0"/><text x="250" y="75">StudentController</text>
+    <rect x="350" y="55" width="170" height="30" rx="4" fill="#234E52"/><text x="435" y="75">RecheckRequestService</text>
+    <rect x="550" y="55" width="150" height="30" rx="4" fill="#B7791F"/><text x="625" y="75">RequestRepository</text>
+    <rect x="730" y="55" width="120" height="30" rx="4" fill="#4A5568"/><text x="790" y="75">AuditService</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="90" y1="85" x2="90" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="250" y1="85" x2="250" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="435" y1="85" x2="435" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="625" y1="85" x2="625" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+  <line x1="790" y1="85" x2="790" y2="520" stroke="#A0AEC0" stroke-dasharray="4"/>
+
+  <!-- Messages -->
+  <line x1="90" y1="120" x2="250" y2="120" stroke="#2B6CB0" stroke-width="1.5"/>
+  <text x="100" y="112" font-size="11" fill="#2B6CB0">POST /student/exams/{eId}/recheck/{qId} (reason)</text>
+
+  <line x1="250" y1="150" x2="435" y2="150" stroke="#234E52" stroke-width="1.5"/>
+  <text x="260" y="142" font-size="11" fill="#234E52">submitRequest(student, examId, questionId, reason)</text>
+
+  <!-- Self call check window -->
+  <path d="M 435 175 L 475 175 L 475 195 L 435 195" fill="none" stroke="#234E52" stroke-width="1.5"/>
+  <text x="480" y="190" font-size="10" fill="#234E52">verifyWindowOpen()</text>
+
+  <!-- Query duplicate -->
+  <line x1="435" y1="230" x2="625" y2="230" stroke="#B7791F" stroke-width="1.5"/>
+  <text x="445" y="222" font-size="11" fill="#B7791F">existsByStudentIdAndExamIdAndQuestionId()</text>
+
+  <line x1="625" y1="260" x2="435" y2="260" stroke="#B7791F" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="475" y="254" font-size="11" fill="#718096">false (no duplicate found)</text>
+
+  <!-- Save request -->
+  <line x1="435" y1="300" x2="625" y2="300" stroke="#B7791F" stroke-width="1.5"/>
+  <text x="445" y="292" font-size="11" fill="#B7791F">saveAndFlush(new RecheckRequest(...))</text>
+
+  <line x1="625" y1="330" x2="435" y2="330" stroke="#B7791F" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="485" y="324" font-size="11" fill="#718096">savedRequest (Status: SUBMITTED)</text>
+
+  <!-- Log audit -->
+  <line x1="435" y1="370" x2="790" y2="370" stroke="#4A5568" stroke-width="1.5"/>
+  <text x="450" y="362" font-size="11" fill="#4A5568">log(student, "REQUEST_SUBMITTED", details)</text>
+
+  <line x1="435" y1="410" x2="250" y2="410" stroke="#234E52" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="280" y="402" font-size="11" fill="#234E52">return savedRequest</text>
+
+  <line x1="250" y1="450" x2="90" y2="450" stroke="#2B6CB0" stroke-width="1.5" stroke-dasharray="3"/>
+  <text x="100" y="442" font-size="11" fill="#2B6CB0">Redirect /student/requests + flash: "Submitted successfully"</text>
+</svg>

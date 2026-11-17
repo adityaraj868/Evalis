@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="main(title, content, activeTab)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">Exam Review Portal</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Application Body Shell -->
+    <div class="app-container">
+        <!-- Sidebar Navigation (when authenticated) -->
+        <div sec:authorize="isAuthenticated()" th:replace="~{fragments/sidebar :: sidebar(${activeTab})}"></div>
+
+        <!-- Main Page Content Area -->
+        <main class="main-content" th:classappend="${#authorization.expression('isAnonymous()')} ? 'container-narrow' : ''">
+            <!-- Alert Messages -->
+            <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+            <!-- Page Injected Content -->
+            <div th:replace="${content}">
+                <p>Default Content</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

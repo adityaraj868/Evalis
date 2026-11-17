@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'analytics')}">
+<head>
+    <title>Question Re-evaluation Analytics - Faculty</title>
+</head>
+<body>
+<section>
+    <div class="page-header">
+        <h1 class="page-title">Question-wise Re-evaluation Analytics</h1>
+        <p class="page-subtitle">Identify questions with unusually high request frequencies to detect grading anomalies or ambiguous questions</p>
+    </div>
+
+    <!-- Filter & Threshold Configuration -->
+    <div class="card" style="padding: var(--space-4); margin-bottom: var(--space-6);">
+        <form th:action="@{/faculty/analytics}" method="get" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4);">
+            <div style="flex: 1; min-width: 250px;">
+                <label for="examId" class="form-label">Select Examination</label>
+                <select name="examId" id="examId" class="form-control" onchange="this.form.submit()">
+                    <option th:each="e : ${exams}"
+                            th:value="${e.id}"
+                            th:text="${e.name}"
+                            th:selected="${selectedExam != null and selectedExam.id == e.id}">
+                        Exam
+                    </option>
+                </select>
+            </div>
+
+            <div style="width: 180px;">
+                <label for="threshold" class="form-label">Flagging Threshold (%)</label>
+                <input type="number" id="threshold" name="threshold" th:value="${threshold}" min="1" max="100" class="form-control">
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-secondary">Apply Threshold</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Analytics Table -->
+    <div th:if="${selectedExam != null}" class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+            <h2 class="card-title" style="margin-bottom: 0;" th:text="${selectedExam.name} + ' - Question Breakdown'">Exam Breakdown</h2>
+            <span style="font-size: var(--font-size-xs); color: var(--color-muted);">
+                Flag criteria: &ge; <span th:text="${threshold}">30</span>% cohort request rate
+            </span>
+        </div>
+
+        <div class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Question</th>
+                        <th>Question Statement</th>
+                        <th style="width: 120px; text-align: center;">Max Marks</th>
+                        <th style="width: 140px; text-align: center;">Total Requests</th>
+                        <th style="width: 140px; text-align: center;">Request Rate</th>
+                        <th style="width: 160px; text-align: center;">Status Flag</th>
+                        <th style="width: 120px; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="s : ${stats}" th:style="${s.flagged} ? 'background-color: var(--color-danger-bg);' : ''">
+                        <td><strong>Q<span th:text="${s.question.questionNumber}">1</span></strong></td>
+                        <td th:text="${s.question.questionText}">Question statement</td>
+                        <td style="text-align: center;" th:text="${s.question.maxMarks}">10.0</td>
+                        <td style="text-align: center;">
+                            <strong th:style="${s.flagged} ? 'color: var(--color-danger); font-size: var(--font-size-base);' : ''"
+                                    th:text="${s.requestCount}">0</strong>
+                        </td>
+                        <td style="text-align: center;">
+                            <span th:text="${#numbers.formatDecimal(s.percentage, 1, 1)} + '%'">0.0%</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span th:if="${s.flagged}" class="badge badge-rejected" style="animation: pulse 2s infinite;">
+                                ⚠️ High Demand
+                            </span>
+                            <span th:if="${!s.flagged}" class="badge" style="background-color: var(--color-surface-hover); color: var(--color-muted);">
+                                Normal
+                            </span>
+                        </td>
+                        <td style="text-align: right;">
+                            <a th:href="@{/faculty/requests(examId=${selectedExam.id})}" class="btn btn-secondary btn-sm">Inspect</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

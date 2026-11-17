@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'home')}">
+<head>
+    <title>Exam Question Re-evaluation & Review Management System</title>
+</head>
+<body>
+<section>
+    <div class="card">
+        <div class="page-header">
+            <h1 class="page-title">Exam Question Re-evaluation Portal</h1>
+            <p class="page-subtitle">Digitized Post-Examination Review & Quality Assurance Workflow</p>
+        </div>
+
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4); line-height: 1.6;">
+            Welcome to the Exam Question Re-evaluation and Review Management System. This platform facilitates transparent, question-level review requests, automated faculty aggregation, and auditable mark revisions.
+        </p>
+
+        <!-- Unauthenticated Quick Start -->
+        <div sec:authorize="isAnonymous()">
+            <div style="display: flex; gap: var(--space-4); margin-top: var(--space-6); margin-bottom: var(--space-8);">
+                <a th:href="@{/login}" class="btn btn-primary">Sign In to Portal</a>
+            </div>
+
+            <div style="border-top: 1px solid var(--color-border); padding-top: var(--space-6);">
+                <h3 style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-bottom: var(--space-3);">
+                    Portal Roles & Workflows
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4);">
+                    <div style="border: 1px solid var(--color-border); padding: var(--space-4); border-radius: var(--radius-md);">
+                        <strong style="color: var(--color-primary);">Student Portal</strong>
+                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0;">
+                            View question-wise marks, identify discrepancies, submit justification-backed review claims, and track real-time resolution.
+                        </p>
+                        <span style="font-size: var(--font-size-xs); color: var(--color-muted);">Login: student@example.com / student123</span>
+                    </div>
+
+                    <div style="border: 1px solid var(--color-border); padding: var(--space-4); border-radius: var(--radius-md);">
+                        <strong style="color: var(--color-primary);">Faculty Portal</strong>
+                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0;">
+                            Manage exams, view question request clusters, review student submissions, award revised marks, and retain grading authority.
+                        </p>
+                        <span style="font-size: var(--font-size-xs); color: var(--color-muted);">Login: faculty@example.com / faculty123</span>
+                    </div>
+
+                    <div style="border: 1px solid var(--color-border); padding: var(--space-4); border-radius: var(--radius-md);">
+                        <strong style="color: var(--color-primary);">Administration</strong>
+                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0;">
+                            Oversee student registry, exam lifecycle, and inspect tamper-evident audit logs across the institution.
+                        </p>
+                        <span style="font-size: var(--font-size-xs); color: var(--color-muted);">Login: admin@example.com / admin123</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authenticated Quick Jump -->
+        <div sec:authorize="isAuthenticated()" style="margin-top: var(--space-4);">
+            <div sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/dashboard}" class="btn btn-primary">Go to Student Dashboard &rarr;</a>
+            </div>
+            <div sec:authorize="hasRole('FACULTY')">
+                <a th:href="@{/faculty/dashboard}" class="btn btn-primary">Go to Faculty Dashboard &rarr;</a>
+            </div>
+            <div sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/dashboard}" class="btn btn-primary">Go to Admin Dashboard &rarr;</a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

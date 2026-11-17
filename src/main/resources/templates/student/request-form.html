@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'exams')}">
+<head>
+    <title>Submit Re-evaluation Request</title>
+</head>
+<body>
+<section>
+    <div style="margin-bottom: var(--space-4);">
+        <a th:href="@{'/student/exams/' + ${exam.id}}" style="color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none;">&larr; Back to Exam Results</a>
+    </div>
+
+    <div style="max-width: 720px; margin: 0 auto;">
+        <div class="card">
+            <div class="page-header" style="border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-4);">
+                <h1 class="page-title">Submit Re-evaluation Request</h1>
+                <p class="page-subtitle" th:text="${exam.name}">Exam Name</p>
+            </div>
+
+            <!-- Question Context Box -->
+            <div style="background-color: var(--color-surface-hover); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-6);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+                    <strong style="font-size: var(--font-size-base);">Question <span th:text="${question.questionNumber}">1</span></strong>
+                    <span style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
+                        Current Marks: <strong><span th:text="${currentMark}">2.0</span> / <span th:text="${question.maxMarks}">10.0</span></strong>
+                    </span>
+                </div>
+                <p style="font-size: var(--font-size-sm); color: var(--color-text);" th:text="${question.questionText}">
+                    Question text goes here.
+                </p>
+            </div>
+
+            <form th:action="@{/student/requests}" method="post">
+                <input type="hidden" name="examId" th:value="${exam.id}">
+                <input type="hidden" name="questionId" th:value="${question.id}">
+
+                <div class="form-group">
+                    <label for="reason" class="form-label">
+                        Reason for Re-evaluation <span style="color: var(--color-danger);">*</span>
+                    </label>
+                    <p style="font-size: var(--font-size-xs); color: var(--color-muted); margin-bottom: var(--space-2);">
+                        Please clearly justify why your answer merits reassessment. Refer to specific steps or grading rubrics where applicable.
+                    </p>
+                    <textarea id="reason" name="reason" rows="5" class="form-control"
+                              placeholder="My solution contains the required approach, but I believe insufficient marks were awarded because..."
+                              required minlength="5"></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: var(--space-3); margin-top: var(--space-6);">
+                    <a th:href="@{'/student/exams/' + ${exam.id}}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

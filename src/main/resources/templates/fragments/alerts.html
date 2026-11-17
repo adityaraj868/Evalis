@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="alerts">
+    <!-- Success Flash Message -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}">
+        Operation completed successfully.
+    </div>
+
+    <!-- Error Flash Message -->
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}">
+        An error occurred while processing the request.
+    </div>
+
+    <!-- Info Flash Message -->
+    <div th:if="${infoMessage}" class="alert alert-info" role="alert" th:text="${infoMessage}">
+        Information notification.
+    </div>
+
+    <!-- Warning Flash Message -->
+    <div th:if="${warningMessage}" class="alert alert-warning" role="alert" th:text="${warningMessage}">
+        Warning notification.
+    </div>
+</div>
+</html>

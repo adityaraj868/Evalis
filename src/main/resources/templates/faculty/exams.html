@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'exams')}">
+<head>
+    <title>Examinations Management - Faculty</title>
+</head>
+<body>
+<section>
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Examinations Management</h1>
+            <p class="page-subtitle">Configure examination lifecycle, manage questions, and toggle re-evaluation availability</p>
+        </div>
+        <a th:href="@{/faculty/exams/new}" class="btn btn-primary">+ Create New Exam</a>
+    </div>
+
+    <div class="card">
+        <div th:if="${#lists.isEmpty(exams)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
+            No examinations recorded. Click "+ Create New Exam" to begin.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(exams)}" class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Examination Name</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Re-evaluation Window</th>
+                        <th>Questions</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="e : ${exams}">
+                        <td><strong th:text="${e.name}">Data Structures Midterm</strong></td>
+                        <td th:text="${e.subject}">Subject</td>
+                        <td>
+                            <div th:replace="~{fragments/badges :: examStatus(${e.status})}"></div>
+                        </td>
+                        <td>
+                            <span th:if="${e.reevaluationStart != null}"
+                                  th:text="${#temporals.format(e.reevaluationStart, 'dd MMM')} + ' - ' + ${#temporals.format(e.reevaluationEnd, 'dd MMM yyyy')}">
+                                Dates
+                            </span>
+                            <span th:if="${e.reevaluationStart == null}" style="color: var(--color-muted);">Not scheduled</span>
+                        </td>
+                        <td>
+                            <span th:text="${e.questions.size()}">5</span> Questions
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: var(--space-2); align-items: center;">
+                                <!-- Toggle Open/Close Re-evaluation Form -->
+                                <form th:if="${e.status.name() != 'RE_EVALUATION_OPEN'}"
+                                      th:action="@{'/faculty/exams/' + ${e.id} + '/status'}" method="post" style="display: inline;">
+                                    <input type="hidden" name="status" value="RE_EVALUATION_OPEN">
+                                    <button type="submit" class="btn btn-primary btn-sm">Open Re-eval</button>
+                                </form>
+
+                                <form th:if="${e.status.name() == 'RE_EVALUATION_OPEN'}"
+                                      th:action="@{'/faculty/exams/' + ${e.id} + '/status'}" method="post" style="display: inline;">
+                                    <input type="hidden" name="status" value="RE_EVALUATION_CLOSED">
+                                    <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--color-warning);">Close Re-eval</button>
+                                </form>
+
+                                <a th:href="@{/faculty/requests(examId=${e.id})}" class="btn btn-secondary btn-sm">Requests</a>
+                                <a th:href="@{/faculty/analytics(examId=${e.id})}" class="btn btn-secondary btn-sm">Analytics</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

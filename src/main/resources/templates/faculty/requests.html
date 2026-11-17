@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'requests')}">
+<head>
+    <title>Re-evaluation Requests - Faculty</title>
+</head>
+<body>
+<section>
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1 class="page-title">Re-evaluation Requests Inbox</h1>
+            <p class="page-subtitle">Inspect student claims, review answers, and record final marks decisions</p>
+        </div>
+        <div>
+            <a th:href="@{/faculty/analytics}" class="btn btn-secondary btn-sm">Inspect Question Trends</a>
+        </div>
+    </div>
+
+    <!-- Filter by Exam -->
+    <div class="card" style="padding: var(--space-4); margin-bottom: var(--space-4);">
+        <form th:action="@{/faculty/requests}" method="get" style="display: flex; align-items: center; gap: var(--space-4);">
+            <label for="examId" class="form-label" style="margin-bottom: 0;">Filter by Exam:</label>
+            <select name="examId" id="examId" class="form-control" style="max-width: 350px;" onchange="this.form.submit()">
+                <option value="">All Examinations</option>
+                <option th:each="e : ${exams}"
+                        th:value="${e.id}"
+                        th:text="${e.name}"
+                        th:selected="${selectedExamId != null and selectedExamId == e.id}">
+                    Exam Name
+                </option>
+            </select>
+            <a th:if="${selectedExamId != null}" th:href="@{/faculty/requests}" class="btn btn-secondary btn-sm">Reset</a>
+        </form>
+    </div>
+
+    <div class="card">
+        <div th:if="${#lists.isEmpty(requests)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
+            No re-evaluation requests found matching current filter.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(requests)}" class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Req #</th>
+                        <th>Student Name</th>
+                        <th>Exam</th>
+                        <th>Question</th>
+                        <th>Submitted Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${requests}">
+                        <td>#<span th:text="${r.id}">1</span></td>
+                        <td><strong th:text="${r.student.name}">Alice Smith</strong></td>
+                        <td th:text="${r.exam.name}">Data Structures</td>
+                        <td><strong>Q<span th:text="${r.question.questionNumber}">4</span></strong></td>
+                        <td style="max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" th:text="${r.reason}">
+                            Student justification...
+                        </td>
+                        <td>
+                            <div th:replace="~{fragments/badges :: requestStatus(${r.status})}"></div>
+                        </td>
+                        <td>
+                            <a th:href="@{'/faculty/requests/' + ${r.id}}" class="btn btn-primary btn-sm">Review & Decide</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

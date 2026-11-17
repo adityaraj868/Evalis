@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="1000" height="650" font-family="monospace" font-size="11">
+  <rect width="1000" height="650" fill="#F8FAFC" rx="8"/>
+  <text x="500" y="28" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1A202C">Entity Relationship (ER) Diagram</text>
+
+  <!-- users -->
+  <g transform="translate(50, 60)">
+    <rect width="200" height="135" fill="#FFF" stroke="#2B6CB0" stroke-width="1.5" rx="4"/>
+    <rect width="200" height="24" fill="#2B6CB0" rx="4"/>
+    <text x="100" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">users</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">    name : VARCHAR</text>
+    <text x="8" y="74" fill="#2D3748">UQ  email : VARCHAR</text>
+    <text x="8" y="90" fill="#2D3748">    password_hash : VARCHAR</text>
+    <text x="8" y="106" fill="#2D3748">    role : VARCHAR</text>
+    <text x="8" y="122" fill="#2D3748">    created_at : DATETIME</text>
+  </g>
+
+  <!-- exams -->
+  <g transform="translate(400, 60)">
+    <rect width="220" height="150" fill="#FFF" stroke="#234E52" stroke-width="1.5" rx="4"/>
+    <rect width="220" height="24" fill="#234E52" rx="4"/>
+    <text x="110" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">exams</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">    name : VARCHAR</text>
+    <text x="8" y="74" fill="#2D3748">    subject : VARCHAR</text>
+    <text x="8" y="90" fill="#2D3748">    exam_date : DATE</text>
+    <text x="8" y="106" fill="#2D3748">    reeval_start : DATETIME</text>
+    <text x="8" y="122" fill="#2D3748">    reeval_end : DATETIME</text>
+    <text x="8" y="138" fill="#2D3748">    status : VARCHAR</text>
+  </g>
+
+  <!-- questions -->
+  <g transform="translate(730, 60)">
+    <rect width="220" height="120" fill="#FFF" stroke="#553C9A" stroke-width="1.5" rx="4"/>
+    <rect width="220" height="24" fill="#553C9A" rx="4"/>
+    <text x="110" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">questions</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">FK  exam_id : BIGINT</text>
+    <text x="8" y="74" fill="#2D3748">    question_number : INT</text>
+    <text x="8" y="90" fill="#2D3748">    description : TEXT</text>
+    <text x="8" y="106" fill="#2D3748">    max_marks : DOUBLE</text>
+  </g>
+
+  <!-- student_results -->
+  <g transform="translate(50, 260)">
+    <rect width="200" height="110" fill="#FFF" stroke="#C53030" stroke-width="1.5" rx="4"/>
+    <rect width="200" height="24" fill="#C53030" rx="4"/>
+    <text x="100" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">student_results</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">FK  student_id : BIGINT</text>
+    <text x="8" y="74" fill="#2D3748">FK  exam_id : BIGINT</text>
+    <text x="8" y="90" fill="#2D3748">    total_marks : DOUBLE</text>
+    <text x="8" y="104" fill="#2D3748">UQ (student_id, exam_id)</text>
+  </g>
+
+  <!-- recheck_requests -->
+  <g transform="translate(380, 260)">
+    <rect width="260" height="150" fill="#FFF" stroke="#2B6CB0" stroke-width="1.5" rx="4"/>
+    <rect width="260" height="24" fill="#2B6CB0" rx="4"/>
+    <text x="130" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">recheck_requests</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">FK  student_id : BIGINT</text>
+    <text x="8" y="74" fill="#2D3748">FK  exam_id : BIGINT</text>
+    <text x="8" y="90" fill="#2D3748">FK  question_id : BIGINT</text>
+    <text x="8" y="106" fill="#2D3748">    reason : TEXT</text>
+    <text x="8" y="122" fill="#2D3748">    status : VARCHAR</text>
+    <text x="8" y="138" fill="#B7791F">UQ(student, exam, question)</text>
+  </g>
+
+  <!-- question_marks -->
+  <g transform="translate(730, 260)">
+    <rect width="220" height="110" fill="#FFF" stroke="#B7791F" stroke-width="1.5" rx="4"/>
+    <rect width="220" height="24" fill="#B7791F" rx="4"/>
+    <text x="110" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">question_marks</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">FK  student_id : BIGINT</text>
+    <text x="8" y="74" fill="#2D3748">FK  question_id : BIGINT</text>
+    <text x="8" y="90" fill="#2D3748">    marks_obtained : DOUBLE</text>
+    <text x="8" y="104" fill="#2D3748">UQ (student_id, question_id)</text>
+  </g>
+
+  <!-- reviews -->
+  <g transform="translate(380, 470)">
+    <rect width="260" height="150" fill="#FFF" stroke="#234E52" stroke-width="1.5" rx="4"/>
+    <rect width="260" height="24" fill="#234E52" rx="4"/>
+    <text x="130" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">reviews</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">FK  request_id : BIGINT</text>
+    <text x="8" y="74" fill="#2D3748">FK  reviewer_id : BIGINT</text>
+    <text x="8" y="90" fill="#2D3748">    decision : VARCHAR</text>
+    <text x="8" y="106" fill="#2D3748">    previous_marks : DOUBLE</text>
+    <text x="8" y="122" fill="#2D3748">    revised_marks : DOUBLE</text>
+    <text x="8" y="138" fill="#2D3748">    remarks : TEXT</text>
+  </g>
+
+  <!-- audit_logs -->
+  <g transform="translate(730, 470)">
+    <rect width="220" height="120" fill="#FFF" stroke="#4A5568" stroke-width="1.5" rx="4"/>
+    <rect width="220" height="24" fill="#4A5568" rx="4"/>
+    <text x="110" y="17" text-anchor="middle" fill="#FFF" font-weight="bold">audit_logs</text>
+    <text x="8" y="42" fill="#2D3748">PK  id : BIGINT</text>
+    <text x="8" y="58" fill="#2D3748">FK  user_id : BIGINT</text>
+    <text x="8" y="74" fill="#2D3748">    action : VARCHAR</text>
+    <text x="8" y="90" fill="#2D3748">    details : TEXT</text>
+    <text x="8" y="106" fill="#2D3748">    timestamp : DATETIME</text>
+  </g>
+
+  <!-- Foreign key relationship paths -->
+  <line x1="620" y1="120" x2="730" y2="120" stroke="#4A5568" stroke-width="1.5"/>
+  <line x1="840" y1="180" x2="840" y2="260" stroke="#4A5568" stroke-width="1.5"/>
+  <line x1="510" y1="410" x2="510" y2="470" stroke="#4A5568" stroke-width="1.5"/>
+</svg>

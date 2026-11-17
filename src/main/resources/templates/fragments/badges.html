@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Request Status Badges -->
+<span th:fragment="requestStatus (status)" th:switch="${#strings.toString(status)}">
+    <span th:case="'SUBMITTED'" class="badge badge-submitted">Submitted</span>
+    <span th:case="'UNDER_REVIEW'" class="badge badge-under-review">Under Review</span>
+    <span th:case="'APPROVED'" class="badge badge-approved">Approved</span>
+    <span th:case="'REJECTED'" class="badge badge-rejected">Rejected</span>
+    <span th:case="'COMPLETED'" class="badge badge-completed">Completed</span>
+    <span th:case="*" class="badge" th:text="${status}">Unknown</span>
+</span>
+
+<!-- Exam Status Badges -->
+<span th:fragment="examStatus (status)" th:switch="${#strings.toString(status)}">
+    <span th:case="'DRAFT'" class="badge badge-draft">Draft</span>
+    <span th:case="'PUBLISHED'" class="badge badge-published">Published</span>
+    <span th:case="'RE_EVALUATION_OPEN'" class="badge badge-reeval-open">Re-eval Open</span>
+    <span th:case="'RE_EVALUATION_CLOSED'" class="badge badge-reeval-closed">Re-eval Closed</span>
+    <span th:case="'ARCHIVED'" class="badge badge-draft">Archived</span>
+    <span th:case="*" class="badge" th:text="${status}">Unknown</span>
+</span>
+</html>

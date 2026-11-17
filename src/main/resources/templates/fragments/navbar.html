@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<header th:fragment="navbar" class="app-header">
+    <a th:href="@{/}" class="brand-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <span>Exam Review Portal</span>
+    </a>
+    
+    <div style="display: flex; align-items: center; gap: var(--space-4);">
+        <!-- Unauthenticated -->
+        <div sec:authorize="isAnonymous()">
+            <a th:href="@{/login}" class="btn btn-primary btn-sm">Login</a>
+        </div>
+
+        <!-- Authenticated -->
+        <div sec:authorize="isAuthenticated()" style="display: flex; align-items: center; gap: var(--space-3);">
+            <span style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
+                <strong sec:authentication="name">User</strong>
+                <span style="color: var(--color-muted); font-size: var(--font-size-xs);" sec:authentication="principal.authorities">Role</span>
+            </span>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-secondary btn-sm">Logout</button>
+            </form>
+        </div>
+    </div>
+</header>
+</html>

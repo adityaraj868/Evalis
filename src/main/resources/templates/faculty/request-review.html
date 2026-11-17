@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'requests')}">
+<head>
+    <title>Review Request #<span th:text="${req.id}">1</span> - Faculty</title>
+</head>
+<body>
+<section>
+    <div style="margin-bottom: var(--space-4);">
+        <a th:href="@{/faculty/requests}" style="color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none;">&larr; Back to Requests</a>
+    </div>
+
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title">Review Request #<span th:text="${req.id}">1</span></h1>
+            <p class="page-subtitle">Student: <strong th:text="${req.student.name}">Alice Smith</strong> (<span th:text="${req.student.email}">alice@example.com</span>)</p>
+        </div>
+        <div>
+            <span th:replace="~{fragments/badges :: requestStatus(${req.status})}"></span>
+        </div>
+    </div>
+
+    <!-- Context Card -->
+    <div class="card">
+        <h2 class="card-title">Claim Context</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); background: var(--color-surface-hover); padding: var(--space-4); border-radius: var(--radius-md);">
+            <div>
+                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Examination</div>
+                <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);" th:text="${req.exam.name}">Data Structures</div>
+            </div>
+            <div>
+                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Question</div>
+                <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);">Question <span th:text="${req.question.questionNumber}">4</span></div>
+            </div>
+            <div>
+                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Current Marks</div>
+                <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);">
+                    <span th:text="${currentMark}">2.0</span> / <span th:text="${req.question.maxMarks}">10.0</span>
+                </div>
+            </div>
+            <div>
+                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Submitted Date</div>
+                <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);" th:text="${#temporals.format(req.createdAt, 'dd MMM yyyy HH:mm')}">Date</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Question Text</label>
+            <div style="padding: var(--space-3); background: var(--color-surface-hover); border-radius: var(--radius-md); font-size: var(--font-size-sm); color: var(--color-text);"
+                 th:text="${req.question.questionText}">
+                Question statement
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Student Stated Reason</label>
+            <div style="padding: var(--space-4); background: var(--color-surface-hover); border-left: 3px solid var(--color-primary); border-radius: var(--radius-md); font-size: var(--font-size-sm);"
+                 th:text="${req.reason}">
+                Student's reason
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Decision Form -->
+    <div class="card">
+        <h2 class="card-title">Record Review Decision</h2>
+
+        <form th:action="@{'/faculty/requests/' + ${req.id} + '/review'}" method="post">
+            <div class="form-group">
+                <label class="form-label">Decision <span style="color: var(--color-danger);">*</span></label>
+                <div style="display: flex; gap: var(--space-6); margin-top: var(--space-1);">
+                    <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                        <input type="radio" name="decision" value="APPROVED" onchange="toggleMarksInput(true)" required>
+                        <span style="color: var(--color-success); font-weight: var(--font-weight-semibold);">Approve (Change Marks)</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                        <input type="radio" name="decision" value="REJECTED" onchange="toggleMarksInput(false)" required>
+                        <span style="color: var(--color-danger); font-weight: var(--font-weight-semibold);">Reject (Maintain Marks)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="marksGroup" class="form-group" style="display: none;">
+                <label for="revisedMarks" class="form-label">
+                    Revised Marks <span style="color: var(--color-danger);">*</span>
+                    <span style="font-size: var(--font-size-xs); color: var(--color-muted);">(Max: <span th:text="${req.question.maxMarks}">10.0</span>)</span>
+                </label>
+                <input type="number" step="0.5" id="revisedMarks" name="revisedMarks" min="0" th:max="${req.question.maxMarks}"
+                       class="form-control" style="max-width: 200px;" placeholder="e.g. 7.0">
+            </div>
+
+            <div class="form-group">
+                <label for="comments" class="form-label">Faculty Feedback / Rationale</label>
+                <textarea id="comments" name="comments" rows="4" class="form-control"
+                          placeholder="Provide feedback explaining the evaluation decision..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-3); margin-top: var(--space-6);">
+                <a th:href="@{/faculty/requests}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Decision</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Review History -->
+    <div th:if="${!#lists.isEmpty(reviews)}" class="card">
+        <h2 class="card-title">Previous Review History</h2>
+        <div th:each="rev : ${reviews}" style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+                <div>
+                    <strong>Reviewer:</strong> <span th:text="${rev.faculty.name}">Prof Turing</span>
+                    <span style="color: var(--color-muted); font-size: var(--font-size-xs); margin-left: var(--space-2);"
+                          th:text="${#temporals.format(rev.reviewedAt, 'dd MMM yyyy HH:mm')}">Date</span>
+                </div>
+                <div>
+                    <span th:if="${rev.decision.name() == 'APPROVED'}" class="badge badge-approved">Approved</span>
+                    <span th:if="${rev.decision.name() == 'REJECTED'}" class="badge badge-rejected">Rejected</span>
+                </div>
+            </div>
+            <div th:if="${rev.decision.name() == 'APPROVED'}" style="margin-bottom: var(--space-2); color: var(--color-success); font-weight: var(--font-weight-semibold);">
+                Revised Marks Awarded: <span th:text="${rev.revisedMarks}">7.0</span> / <span th:text="${req.question.maxMarks}">10.0</span>
+            </div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);" th:text="${rev.comments}">Comments</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMarksInput(isApproved) {
+            const marksGroup = document.getElementById('marksGroup');
+            const input = document.getElementById('revisedMarks');
+            if (isApproved) {
+                marksGroup.style.display = 'block';
+                input.required = true;
+            } else {
+                marksGroup.style.display = 'none';
+                input.required = false;
+            }
+        }
+    </script>
+</section>
+</body>
+</html>

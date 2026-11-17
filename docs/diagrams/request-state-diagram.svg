@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320" font-family="Arial, sans-serif">
+  <rect width="900" height="320" fill="#F8FAFC" rx="8"/>
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1A202C">Re-evaluation Request Lifecycle State Diagram</text>
+
+  <!-- Start -->
+  <circle cx="60" cy="140" r="14" fill="#2B6CB0"/>
+  <line x1="74" y1="140" x2="130" y2="140" stroke="#4A5568" stroke-width="2"/>
+  <text x="100" y="130" font-size="10" fill="#4A5568">Submit</text>
+
+  <!-- SUBMITTED -->
+  <rect x="130" y="115" width="130" height="50" rx="8" fill="#EBF8FF" stroke="#3182CE" stroke-width="2"/>
+  <text x="195" y="145" text-anchor="middle" font-weight="bold" fill="#2B6CB0">SUBMITTED</text>
+
+  <line x1="260" y1="140" x2="350" y2="140" stroke="#4A5568" stroke-width="2"/>
+  <text x="305" y="130" text-anchor="middle" font-size="10" fill="#4A5568">Faculty Opens</text>
+
+  <!-- UNDER_REVIEW -->
+  <rect x="350" y="115" width="150" height="50" rx="8" fill="#FEFCBF" stroke="#D69E2E" stroke-width="2"/>
+  <text x="425" y="145" text-anchor="middle" font-weight="bold" fill="#744210">UNDER_REVIEW</text>
+
+  <!-- Branches -->
+  <!-- Top: APPROVED -->
+  <path d="M 500 130 L 570 90 L 610 90" fill="none" stroke="#2B6CB0" stroke-width="2"/>
+  <text x="545" y="85" font-size="10" fill="#2B6CB0">Approved</text>
+  <rect x="610" y="65" width="120" height="50" rx="8" fill="#E6FFFA" stroke="#319795" stroke-width="2"/>
+  <text x="670" y="95" text-anchor="middle" font-weight="bold" fill="#234E52">APPROVED</text>
+
+  <!-- Bottom: REJECTED -->
+  <path d="M 500 150 L 570 190 L 610 190" fill="none" stroke="#C53030" stroke-width="2"/>
+  <text x="545" y="200" font-size="10" fill="#C53030">Rejected</text>
+  <rect x="610" y="165" width="120" height="50" rx="8" fill="#FFF5F5" stroke="#E53E3E" stroke-width="2"/>
+  <text x="670" y="195" text-anchor="middle" font-weight="bold" fill="#9B2C2C">REJECTED</text>
+
+  <!-- Join to COMPLETED -->
+  <path d="M 730 90 L 780 140" fill="none" stroke="#4A5568" stroke-width="2"/>
+  <path d="M 730 190 L 780 140" fill="none" stroke="#4A5568" stroke-width="2"/>
+
+  <!-- COMPLETED -->
+  <rect x="760" y="115" width="110" height="50" rx="8" fill="#EDF2F7" stroke="#4A5568" stroke-width="2"/>
+  <text x="815" y="145" text-anchor="middle" font-weight="bold" fill="#1A202C">COMPLETED</text>
+</svg>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'exams')}">
+<head>
+    <title th:text="${exam.name} + ' - Marks Breakdown'">Exam Results</title>
+</head>
+<body>
+<section>
+    <div style="margin-bottom: var(--space-4);">
+        <a th:href="@{/student/exams}" style="color: var(--color-primary); font-size: var(--font-size-sm); text-decoration: none;">&larr; Back to My Exams</a>
+    </div>
+
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <h1 class="page-title" th:text="${exam.name}">Data Structures Midterm</h1>
+            <p class="page-subtitle">Subject: <span th:text="${exam.subject}">CS</span> &bull; Status: <span th:replace="~{fragments/badges :: examStatus(${exam.status})}"></span></p>
+        </div>
+        <div class="card" style="margin-bottom: 0; padding: var(--space-3) var(--space-5); text-align: right;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">Total Score</div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary);" th:text="${result.totalMarks}">32.0</div>
+        </div>
+    </div>
+
+    <!-- Re-evaluation Status Notice -->
+    <div th:if="${isReevalOpen}" class="alert alert-info" style="margin-bottom: var(--space-4);">
+        ℹ️ Re-evaluation is currently <strong>OPEN</strong> for this examination until <span th:text="${#temporals.format(exam.reevaluationEnd, 'dd MMM yyyy HH:mm')}">Date</span>. You may request review for any question where you believe grading requires reassessment.
+    </div>
+    <div th:if="${!isReevalOpen}" class="alert alert-warning" style="margin-bottom: var(--space-4);">
+        ⚠️ Re-evaluation is currently <strong>CLOSED</strong> for this examination. New requests cannot be submitted.
+    </div>
+
+    <!-- Question-wise Breakdown Table -->
+    <div class="card">
+        <h2 class="card-title">Question-wise Marks</h2>
+
+        <div class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Q#</th>
+                        <th>Question Description</th>
+                        <th style="width: 140px; text-align: center;">Marks Obtained</th>
+                        <th style="width: 120px; text-align: center;">Max Marks</th>
+                        <th style="width: 200px; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="q : ${questions}">
+                        <td><strong>Q<span th:text="${q.questionNumber}">1</span></strong></td>
+                        <td th:text="${q.questionText}">Description of question</td>
+                        <td style="text-align: center;">
+                            <strong style="color: var(--color-text);"
+                                    th:text="${questionMarksMap.get(q.id) != null ? questionMarksMap.get(q.id) : '0.0'}">
+                                0.0
+                            </strong>
+                        </td>
+                        <td style="text-align: center; color: var(--color-muted);" th:text="${q.maxMarks}">10.0</td>
+                        <td style="text-align: right;">
+                            <!-- Already requested -->
+                            <span th:if="${existingRequestsMap.get(q.id)}" class="badge badge-under-review">
+                                Request Submitted
+                            </span>
+
+                            <!-- Eligible for request -->
+                            <a th:if="${!existingRequestsMap.get(q.id) and isReevalOpen}"
+                               th:href="@{/student/requests/new(examId=${exam.id}, questionId=${q.id})}"
+                               class="btn btn-primary btn-sm">
+                                Request Review
+                            </a>
+
+                            <!-- Window closed -->
+                            <span th:if="${!existingRequestsMap.get(q.id) and !isReevalOpen}" style="color: var(--color-muted); font-size: var(--font-size-xs);">
+                                Closed
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>

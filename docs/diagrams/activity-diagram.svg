@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 820" width="850" height="820" font-family="Arial, sans-serif">
+  <rect width="850" height="820" fill="#F8FAFC" rx="8"/>
+  <text x="425" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1A202C">UML Activity Diagram — Re-evaluation Lifecycle</text>
+
+  <!-- Start node -->
+  <circle cx="425" cy="60" r="14" fill="#2B6CB0"/>
+
+  <path d="M 425 74 L 425 105" stroke="#4A5568" stroke-width="2"/>
+  
+  <!-- Step 1 -->
+  <rect x="295" y="105" width="260" height="40" rx="8" fill="#EBF8FF" stroke="#3182CE" stroke-width="1.5"/>
+  <text x="425" y="130" text-anchor="middle" font-size="12">Student Inspects Question Breakdown</text>
+
+  <path d="M 425 145 L 425 175" stroke="#4A5568" stroke-width="2"/>
+
+  <!-- Decision 1: Window Open? -->
+  <polygon points="425,175 495,205 425,235 355,205" fill="#FEFCBF" stroke="#D69E2E" stroke-width="1.5"/>
+  <text x="425" y="210" text-anchor="middle" font-size="11">Re-eval Open?</text>
+
+  <path d="M 495 205 L 670 205 L 670 260" stroke="#E53E3E" stroke-width="1.5"/>
+  <text x="560" y="195" font-size="11" fill="#E53E3E">[No]</text>
+  <rect x="580" y="260" width="180" height="35" rx="6" fill="#FFF5F5" stroke="#E53E3E"/>
+  <text x="670" y="282" text-anchor="middle" font-size="11" fill="#C53030">Window Closed Alert</text>
+
+  <path d="M 425 235 L 425 270" stroke="#4A5568" stroke-width="2"/>
+  <text x="435" y="255" font-size="11" fill="#2B6CB0">[Yes]</text>
+
+  <!-- Step 2 -->
+  <rect x="295" y="270" width="260" height="40" rx="8" fill="#EBF8FF" stroke="#3182CE" stroke-width="1.5"/>
+  <text x="425" y="295" text-anchor="middle" font-size="12">Student Submits Request &amp; Reason</text>
+
+  <path d="M 425 310 L 425 340" stroke="#4A5568" stroke-width="2"/>
+
+  <!-- Decision 2: Duplicate check -->
+  <polygon points="425,340 500,370 425,400 350,370" fill="#FEFCBF" stroke="#D69E2E" stroke-width="1.5"/>
+  <text x="425" y="374" text-anchor="middle" font-size="11">Duplicate Request?</text>
+
+  <path d="M 500 370 L 670 370 L 670 410" stroke="#E53E3E" stroke-width="1.5"/>
+  <text x="560" y="360" font-size="11" fill="#E53E3E">[Yes]</text>
+  <rect x="575" y="410" width="190" height="35" rx="6" fill="#FFF5F5" stroke="#E53E3E"/>
+  <text x="670" y="432" text-anchor="middle" font-size="11" fill="#C53030">Reject (ADR-003 Violation)</text>
+
+  <path d="M 425 400 L 425 435" stroke="#4A5568" stroke-width="2"/>
+  <text x="435" y="420" font-size="11" fill="#2B6CB0">[No]</text>
+
+  <!-- Step 3 -->
+  <rect x="290" y="435" width="270" height="40" rx="8" fill="#E6FFFA" stroke="#319795" stroke-width="1.5"/>
+  <text x="425" y="460" text-anchor="middle" font-size="12">Store Request (Status: SUBMITTED)</text>
+
+  <path d="M 425 475 L 425 505" stroke="#4A5568" stroke-width="2"/>
+
+  <!-- Step 4 -->
+  <rect x="280" y="505" width="290" height="40" rx="8" fill="#FAF5FF" stroke="#805AD5" stroke-width="1.5"/>
+  <text x="425" y="530" text-anchor="middle" font-size="12">Faculty Opens &amp; Reviews (UNDER_REVIEW)</text>
+
+  <path d="M 425 545 L 425 575" stroke="#4A5568" stroke-width="2"/>
+
+  <!-- Decision 3: Verdict -->
+  <polygon points="425,575 495,605 425,635 355,605" fill="#FEFCBF" stroke="#D69E2E" stroke-width="1.5"/>
+  <text x="425" y="610" text-anchor="middle" font-size="11">Approve?</text>
+
+  <!-- Left: Approved -->
+  <path d="M 355 605 L 230 605 L 230 645" stroke="#2B6CB0" stroke-width="1.5"/>
+  <text x="280" y="595" font-size="11" fill="#2B6CB0">[Approved]</text>
+  <rect x="110" y="645" width="240" height="45" rx="6" fill="#EBF8FF" stroke="#3182CE"/>
+  <text x="230" y="665" text-anchor="middle" font-size="11">Amend Question Marks</text>
+  <text x="230" y="680" text-anchor="middle" font-size="10" fill="#4A5568">Recalculate Student Total</text>
+
+  <!-- Right: Rejected -->
+  <path d="M 495 605 L 610 605 L 610 645" stroke="#C53030" stroke-width="1.5"/>
+  <text x="540" y="595" font-size="11" fill="#C53030">[Rejected]</text>
+  <rect x="510" y="645" width="200" height="45" rx="6" fill="#FFF5F5" stroke="#E53E3E"/>
+  <text x="610" y="665" text-anchor="middle" font-size="11">Keep Marks Unchanged</text>
+  <text x="610" y="680" text-anchor="middle" font-size="10" fill="#4A5568">Record Justification</text>
+
+  <!-- Join -->
+  <path d="M 230 690 L 230 720 L 425 720" stroke="#4A5568" stroke-width="1.5"/>
+  <path d="M 610 690 L 610 720 L 425 720" stroke="#4A5568" stroke-width="1.5"/>
+  <path d="M 425 720 L 425 745" stroke="#4A5568" stroke-width="2"/>
+
+  <!-- Step 5 -->
+  <rect x="300" y="745" width="250" height="35" rx="6" fill="#EDF2F7" stroke="#4A5568"/>
+  <text x="425" y="767" text-anchor="middle" font-size="11">Record Immutable Audit Log</text>
+
+  <path d="M 425 780 L 425 800" stroke="#4A5568" stroke-width="2"/>
+  <circle cx="425" cy="808" r="8" fill="#1A202C"/>
+  <circle cx="425" cy="808" r="12" fill="none" stroke="#1A202C" stroke-width="1.5"/>
+</svg>

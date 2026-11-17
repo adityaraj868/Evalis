@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'login')}">
+<head>
+    <title>Sign In - Exam Review Portal</title>
+</head>
+<body>
+<section>
+    <div style="max-width: 480px; margin: var(--space-8) auto;">
+        <div class="card">
+            <div class="page-header" style="text-align: center; margin-bottom: var(--space-6);">
+                <h1 class="page-title">Sign In</h1>
+                <p class="page-subtitle">Access your examination & re-evaluation workspace</p>
+            </div>
+
+            <!-- Error Banner -->
+            <div th:if="${param.error}" class="alert alert-danger" style="margin-bottom: var(--space-4);">
+                Invalid email or password. Please try again.
+            </div>
+
+            <!-- Logout Banner -->
+            <div th:if="${param.logout}" class="alert alert-info" style="margin-bottom: var(--space-4);">
+                You have been signed out successfully.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="username" class="form-label">Email Address</label>
+                    <input type="email" id="username" name="username" class="form-control" placeholder="user@example.com" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-4);">
+                    Sign In
+                </button>
+            </form>
+
+            <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
+                <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--color-muted); text-transform: uppercase; margin-bottom: var(--space-2);">
+                    Quick Demo Credentials
+                </div>
+                <div style="display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-xs);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--color-surface-hover); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                        <span><strong>Student:</strong> student@example.com</span>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="fillForm('student@example.com', 'student123')">Use</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--color-surface-hover); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                        <span><strong>Faculty:</strong> faculty@example.com</span>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="fillForm('faculty@example.com', 'faculty123')">Use</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--color-surface-hover); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                        <span><strong>Admin:</strong> admin@example.com</span>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="fillForm('admin@example.com', 'admin123')">Use</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fillForm(email, pass) {
+            document.getElementById('username').value = email;
+            document.getElementById('password').value = pass;
+        }
+    </script>
+</section>
+</body>
+</html>

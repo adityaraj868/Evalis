@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<nav th:fragment="sidebar (activeTab)" class="sidebar">
+    <!-- Student Navigation -->
+    <div sec:authorize="hasRole('STUDENT')" style="display: flex; flex-direction: column; gap: var(--space-1);">
+        <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase;">
+            Student Portal
+        </div>
+        <a th:href="@{/student/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active' : ''">
+            <span>Dashboard</span>
+        </a>
+        <a th:href="@{/student/exams}" class="nav-link" th:classappend="${activeTab == 'exams'} ? 'active' : ''">
+            <span>My Examinations</span>
+        </a>
+        <a th:href="@{/student/requests}" class="nav-link" th:classappend="${activeTab == 'requests'} ? 'active' : ''">
+            <span>My Requests</span>
+        </a>
+    </div>
+
+    <!-- Faculty Navigation -->
+    <div sec:authorize="hasRole('FACULTY')" style="display: flex; flex-direction: column; gap: var(--space-1);">
+        <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase;">
+            Faculty Management
+        </div>
+        <a th:href="@{/faculty/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active' : ''">
+            <span>Dashboard</span>
+        </a>
+        <a th:href="@{/faculty/exams}" class="nav-link" th:classappend="${activeTab == 'exams'} ? 'active' : ''">
+            <span>Examinations</span>
+        </a>
+        <a th:href="@{/faculty/requests}" class="nav-link" th:classappend="${activeTab == 'requests'} ? 'active' : ''">
+            <span>Re-evaluation Requests</span>
+        </a>
+        <a th:href="@{/faculty/analytics}" class="nav-link" th:classappend="${activeTab == 'analytics'} ? 'active' : ''">
+            <span>Question Analytics</span>
+        </a>
+    </div>
+
+    <!-- Admin Navigation -->
+    <div sec:authorize="hasRole('ADMIN')" style="display: flex; flex-direction: column; gap: var(--space-1);">
+        <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase;">
+            Administration
+        </div>
+        <a th:href="@{/admin/dashboard}" class="nav-link" th:classappend="${activeTab == 'admin-dashboard'} ? 'active' : ''">
+            <span>Admin Dashboard</span>
+        </a>
+        <a th:href="@{/admin/students}" class="nav-link" th:classappend="${activeTab == 'students'} ? 'active' : ''">
+            <span>Student Registry</span>
+        </a>
+        <a th:href="@{/admin/audit-logs}" class="nav-link" th:classappend="${activeTab == 'audit-logs'} ? 'active' : ''">
+            <span>Audit Logs</span>
+        </a>
+    </div>
+</nav>
+</html>

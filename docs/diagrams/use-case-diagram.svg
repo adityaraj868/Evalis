@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 620" width="950" height="620" font-family="Arial, sans-serif">
+  <rect width="950" height="620" fill="#F8FAFC" rx="8"/>
+  <text x="475" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1A202C">UML Use Case Diagram — Exam Question Re-evaluation System</text>
+
+  <!-- System Boundary -->
+  <rect x="250" y="55" width="460" height="540" fill="#FFFFFF" stroke="#4A5568" stroke-width="2" rx="8"/>
+  <text x="270" y="80" font-size="13" font-weight="bold" fill="#2B6CB0">Exam Review Portal System Boundary</text>
+
+  <!-- Use cases -->
+  <!-- Auth -->
+  <ellipse cx="480" cy="110" rx="130" ry="22" fill="#EDF2F7" stroke="#4A5568"/>
+  <text x="480" y="115" text-anchor="middle" font-size="12">Authenticate (Login / Logout)</text>
+
+  <!-- Student UCs -->
+  <ellipse cx="480" cy="165" rx="140" ry="22" fill="#EBF8FF" stroke="#3182CE"/>
+  <text x="480" y="170" text-anchor="middle" font-size="12">View Examination Results</text>
+
+  <ellipse cx="480" cy="220" rx="150" ry="22" fill="#EBF8FF" stroke="#3182CE"/>
+  <text x="480" y="225" text-anchor="middle" font-size="12">Inspect Question-Wise Marks</text>
+
+  <ellipse cx="480" cy="275" rx="160" ry="22" fill="#EBF8FF" stroke="#3182CE"/>
+  <text x="480" y="280" text-anchor="middle" font-size="12">Submit Re-evaluation Request</text>
+
+  <ellipse cx="480" cy="330" rx="140" ry="22" fill="#EBF8FF" stroke="#3182CE"/>
+  <text x="480" y="335" text-anchor="middle" font-size="12">Track Recheck Request Status</text>
+
+  <!-- Faculty UCs -->
+  <ellipse cx="480" cy="385" rx="145" ry="22" fill="#E6FFFA" stroke="#319795"/>
+  <text x="480" y="390" text-anchor="middle" font-size="12">Create Exam &amp; Configure Questions</text>
+
+  <ellipse cx="480" cy="440" rx="140" ry="22" fill="#E6FFFA" stroke="#319795"/>
+  <text x="480" y="445" text-anchor="middle" font-size="12">Review Re-evaluation Requests</text>
+
+  <ellipse cx="480" cy="495" rx="150" ry="22" fill="#E6FFFA" stroke="#319795"/>
+  <text x="480" y="500" text-anchor="middle" font-size="12">Amend Marks &amp; Submit Verdict</text>
+
+  <ellipse cx="480" cy="550" rx="140" ry="22" fill="#E6FFFA" stroke="#319795"/>
+  <text x="480" y="555" text-anchor="middle" font-size="12">View Question Dispute Analytics</text>
+
+  <!-- Admin UC -->
+  <ellipse cx="480" cy="580" rx="130" ry="14" fill="#FAF5FF" stroke="#805AD5"/>
+  <text x="480" y="584" text-anchor="middle" font-size="10">Inspect System Audit Logs</text>
+
+  <!-- Student Actor -->
+  <g transform="translate(100, 220)">
+    <circle cx="20" cy="20" r="16" fill="#EBF8FF" stroke="#2B6CB0" stroke-width="2"/>
+    <line x1="20" y1="36" x2="20" y2="80" stroke="#2B6CB0" stroke-width="2"/>
+    <line x1="-10" y1="52" x2="50" y2="52" stroke="#2B6CB0" stroke-width="2"/>
+    <line x1="20" y1="80" x2="-5" y2="120" stroke="#2B6CB0" stroke-width="2"/>
+    <line x1="20" y1="80" x2="45" y2="120" stroke="#2B6CB0" stroke-width="2"/>
+    <text x="20" y="145" text-anchor="middle" font-size="14" font-weight="bold" fill="#2B6CB0">Student</text>
+  </g>
+
+  <!-- Connect Student to UCs -->
+  <line x1="140" y1="250" x2="350" y2="115" stroke="#2B6CB0" stroke-width="1.5"/>
+  <line x1="140" y1="260" x2="340" y2="165" stroke="#2B6CB0" stroke-width="1.5"/>
+  <line x1="140" y1="270" x2="330" y2="220" stroke="#2B6CB0" stroke-width="1.5"/>
+  <line x1="140" y1="280" x2="320" y2="275" stroke="#2B6CB0" stroke-width="1.5"/>
+  <line x1="140" y1="290" x2="340" y2="330" stroke="#2B6CB0" stroke-width="1.5"/>
+
+  <!-- Faculty Actor -->
+  <g transform="translate(830, 360)">
+    <circle cx="20" cy="20" r="16" fill="#E6FFFA" stroke="#234E52" stroke-width="2"/>
+    <line x1="20" y1="36" x2="20" y2="80" stroke="#234E52" stroke-width="2"/>
+    <line x1="-10" y1="52" x2="50" y2="52" stroke="#234E52" stroke-width="2"/>
+    <line x1="20" y1="80" x2="-5" y2="120" stroke="#234E52" stroke-width="2"/>
+    <line x1="20" y1="80" x2="45" y2="120" stroke="#234E52" stroke-width="2"/>
+    <text x="20" y="145" text-anchor="middle" font-size="14" font-weight="bold" fill="#234E52">Faculty</text>
+  </g>
+
+  <!-- Connect Faculty to UCs -->
+  <line x1="810" y1="390" x2="610" y2="115" stroke="#234E52" stroke-width="1.5"/>
+  <line x1="810" y1="400" x2="625" y2="385" stroke="#234E52" stroke-width="1.5"/>
+  <line x1="810" y1="410" x2="620" y2="440" stroke="#234E52" stroke-width="1.5"/>
+  <line x1="810" y1="420" x2="630" y2="495" stroke="#234E52" stroke-width="1.5"/>
+  <line x1="810" y1="430" x2="620" y2="550" stroke="#234E52" stroke-width="1.5"/>
+
+  <!-- Admin Actor -->
+  <g transform="translate(830, 110)">
+    <circle cx="20" cy="20" r="16" fill="#FAF5FF" stroke="#553C9A" stroke-width="2"/>
+    <line x1="20" y1="36" x2="20" y2="80" stroke="#553C9A" stroke-width="2"/>
+    <line x1="-10" y1="52" x2="50" y2="52" stroke="#553C9A" stroke-width="2"/>
+    <line x1="20" y1="80" x2="-5" y2="120" stroke="#553C9A" stroke-width="2"/>
+    <line x1="20" y1="80" x2="45" y2="120" stroke="#553C9A" stroke-width="2"/>
+    <text x="20" y="145" text-anchor="middle" font-size="14" font-weight="bold" fill="#553C9A">Admin</text>
+  </g>
+  <line x1="810" y1="130" x2="610" y2="115" stroke="#553C9A" stroke-width="1.5"/>
+  <line x1="810" y1="160" x2="610" y2="580" stroke="#553C9A" stroke-width="1.5"/>
+</svg>

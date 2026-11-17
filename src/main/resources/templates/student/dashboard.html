@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'dashboard')}">
+<head>
+    <title>Student Dashboard - Exam Review Portal</title>
+</head>
+<body>
+<section>
+    <div class="page-header">
+        <h1 class="page-title">Welcome, <span th:text="${student.name}">Student</span></h1>
+        <p class="page-subtitle">View examination results and manage your re-evaluation requests</p>
+    </div>
+
+    <!-- Stat Summary Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Exams Enrolled
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
+                 th:text="${results.size()}">0</div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Pending Requests
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-warning); margin-top: var(--space-1);"
+                 th:text="${pendingCount}">0</div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Approved Reviews
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-success); margin-top: var(--space-1);"
+                 th:text="${approvedCount}">0</div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0;">
+            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+                Rejected Reviews
+            </div>
+            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-danger); margin-top: var(--space-1);"
+                 th:text="${rejectedCount}">0</div>
+        </div>
+    </div>
+
+    <!-- Quick Examinations List -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+            <h2 class="card-title" style="margin-bottom: 0;">My Examinations</h2>
+            <a th:href="@{/student/exams}" class="btn btn-secondary btn-sm">View All</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(results)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
+            No examination results found.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(results)}" class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Examination</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Total Marks</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${results}">
+                        <td><strong th:text="${r.exam.name}">Midterm</strong></td>
+                        <td th:text="${r.exam.subject}">Computer Science</td>
+                        <td>
+                            <div th:replace="~{fragments/badges :: examStatus(${r.exam.status})}"></div>
+                        </td>
+                        <td><span style="font-weight: var(--font-weight-semibold);" th:text="${r.totalMarks}">0.0</span></td>
+                        <td>
+                            <a th:href="@{'/student/exams/' + ${r.exam.id}}" class="btn btn-primary btn-sm">View Breakdown</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Requests -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+            <h2 class="card-title" style="margin-bottom: 0;">Recent Re-evaluation Requests</h2>
+            <a th:href="@{/student/requests}" class="btn btn-secondary btn-sm">View All</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(requests)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
+            You have not submitted any re-evaluation requests yet.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(requests)}" class="table-container" style="margin-bottom: 0;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Exam</th>
+                        <th>Question</th>
+                        <th>Date Submitted</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="req : ${requests}">
+                        <td th:text="${req.exam.name}">Exam</td>
+                        <td>Q<span th:text="${req.question.questionNumber}">1</span></td>
+                        <td th:text="${#temporals.format(req.createdAt, 'dd MMM yyyy HH:mm')}">Date</td>
+                        <td>
+                            <div th:replace="~{fragments/badges :: requestStatus(${req.status})}"></div>
+                        </td>
+                        <td>
+                            <a th:href="@{'/student/requests/' + ${req.id}}" class="btn btn-secondary btn-sm">Details</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>
