@@ -3,6 +3,7 @@ package com.example.examreview.config;
 import com.example.examreview.security.RoleBasedAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final RoleBasedAuthenticationSuccessHandler successHandler;
@@ -23,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/login", "/403", "/h2-console/**").permitAll()
+                .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/login", "/403", "/404", "/400", "/error", "/h2-console/**").permitAll()
                 .requestMatchers("/student/**").hasRole("STUDENT")
                 .requestMatchers("/faculty/**").hasRole("FACULTY")
                 .requestMatchers("/admin/**").hasRole("ADMIN")

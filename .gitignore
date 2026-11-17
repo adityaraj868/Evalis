@@ -22,3 +22,5 @@ application-secret.yml
 
 .DS_Store
 Thumbs.db
+
+/report_for_sub/

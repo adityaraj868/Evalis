@@ -1,6 +1,8 @@
 package com.example.examreview.controller;
 
 import com.example.examreview.entity.*;
+import com.example.examreview.exception.ResourceNotFoundException;
+import com.example.examreview.exception.UnauthorizedAccessException;
 import com.example.examreview.service.ExamService;
 import com.example.examreview.service.MarksService;
 import com.example.examreview.service.RecheckRequestService;
@@ -33,7 +35,7 @@ public class StudentController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        User student = userService.getCurrentUser();
+        User student = userService.getRequiredCurrentUser();
         List<StudentResult> results = marksService.getStudentResults(student.getId());
         List<RecheckRequest> requests = recheckRequestService.getStudentRequests(student.getId());
 
@@ -49,7 +51,7 @@ public class StudentController {
 
     @GetMapping("/exams")
     public String exams(Model model) {
-        User student = userService.getCurrentUser();
+        User student = userService.getRequiredCurrentUser();
         List<StudentResult> results = marksService.getStudentResults(student.getId());
         model.addAttribute("results", results);
         return "student/exams";
@@ -57,18 +59,16 @@ public class StudentController {
 
     @GetMapping("/exams/{id}")
     public String examDetail(@PathVariable("id") Long examId, Model model, RedirectAttributes redirectAttributes) {
-        User student = userService.getCurrentUser();
+        User student = userService.getRequiredCurrentUser();
         Optional<Exam> examOpt = examService.getExamById(examId);
         if (examOpt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Examination not found.");
-            return "redirect:/student/exams";
+            throw new ResourceNotFoundException("Examination not found with ID: " + examId);
         }
         Exam exam = examOpt.get();
 
         Optional<StudentResult> resultOpt = marksService.getStudentResult(student.getId(), examId);
         if (resultOpt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "No examination record found for you on this exam.");
-            return "redirect:/student/exams";
+            throw new UnauthorizedAccessException("You are not enrolled or have no marks record for this examination.");
         }
 
         List<Question> questions = examService.getQuestionsForExam(examId);
@@ -100,14 +100,13 @@ public class StudentController {
                                  @RequestParam("questionId") Long questionId,
                                  Model model,
                                  RedirectAttributes redirectAttributes) {
-        User student = userService.getCurrentUser();
+        User student = userService.getRequiredCurrentUser();
 
         Optional<Exam> examOpt = examService.getExamById(examId);
         Optional<Question> questionOpt = examService.getQuestionById(questionId);
 
         if (examOpt.isEmpty() || questionOpt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid exam or question selected.");
-            return "redirect:/student/exams";
+            throw new ResourceNotFoundException("Invalid exam or question selected.");
         }
 
         Exam exam = examOpt.get();
@@ -132,7 +131,7 @@ public class StudentController {
                                 @RequestParam("questionId") Long questionId,
                                 @RequestParam("reason") String reason,
                                 RedirectAttributes redirectAttributes) {
-        User student = userService.getCurrentUser();
+        User student = userService.getRequiredCurrentUser();
         try {
             RecheckRequest request = recheckRequestService.submitRequest(student, examId, questionId, reason);
             redirectAttributes.addFlashAttribute("successMessage", "Re-evaluation request submitted successfully!");
@@ -145,23 +144,26 @@ public class StudentController {
 
     @GetMapping("/requests")
     public String requests(Model model) {
-        User student = userService.getCurrentUser();
+        User student = userService.getRequiredCurrentUser();
         List<RecheckRequest> requests = recheckRequestService.getStudentRequests(student.getId());
         model.addAttribute("requests", requests);
         return "student/requests";
     }
 
     @GetMapping("/requests/{id}")
-    public String requestDetail(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes) {
-        User student = userService.getCurrentUser();
+    public String requestDetail(@PathVariable("id") Long id, Model model) {
+        User student = userService.getRequiredCurrentUser();
         Optional<RecheckRequest> requestOpt = recheckRequestService.getRequestById(id);
 
-        if (requestOpt.isEmpty() || !requestOpt.get().getStudent().getId().equals(student.getId())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Request not found.");
-            return "redirect:/student/requests";
+        if (requestOpt.isEmpty()) {
+            throw new ResourceNotFoundException("Re-evaluation request not found with ID: " + id);
         }
 
         RecheckRequest request = requestOpt.get();
+        if (!request.getStudent().getId().equals(student.getId())) {
+            throw new UnauthorizedAccessException("You are not authorized to view another student's re-evaluation request.");
+        }
+
         Optional<QuestionMark> markOpt = marksService.getQuestionMark(student.getId(), request.getQuestion().getId());
 
         model.addAttribute("req", request);
@@ -170,4 +172,5 @@ public class StudentController {
 
         return "student/request-detail";
     }
+}
 }
