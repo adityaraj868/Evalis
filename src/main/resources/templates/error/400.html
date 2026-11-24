@@ -6,14 +6,22 @@
 </head>
 <body>
 <section>
-    <div style="max-width: 600px; margin: var(--space-8) auto; text-align: center;">
+    <div style="max-width: 640px; margin: var(--space-8) auto; text-align: center;">
         <div class="card">
-            <div style="font-size: 3rem; margin-bottom: var(--space-2);">⚠️</div>
-            <h1 class="page-title" style="color: var(--color-danger);">Invalid Request (400)</h1>
+            <div class="ascii-art-box amber-accent">
++---------------------------------------+
+|  [!] 400 - INVALID_REQUEST_PAYLOAD    |
+|  STATUS: FAILED_INTEGRITY_CHECK       |
++---------------------------------------+
+ \_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/</div>
+            <h1 class="page-title text-amber">Invalid Request (400)</h1>
             <p class="page-subtitle" style="margin-bottom: var(--space-6);" th:text="${errorMessage ?: 'The requested operation could not be completed.'}">
                 The requested operation is invalid or violates business rules.
             </p>
-            <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+            <div style="display: flex; justify-content: center; gap: var(--space-3);">
+                <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+                <button onclick="window.history.back()" class="btn btn-secondary">Go Back</button>
+            </div>
         </div>
     </div>
 </section>

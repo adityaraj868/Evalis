@@ -16,7 +16,7 @@
         <form th:action="@{/admin/audit-logs}" method="get" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4);">
             <div style="flex: 1; min-width: 180px;">
                 <label for="action" class="form-label">Filter Action</label>
-                <select name="action" id="action" class="form-control" onchange="this.form.submit()">
+                <select name="action" id="action" class="form-control font-mono" onchange="this.form.submit()">
                     <option value="ALL">All Actions</option>
                     <option value="EXAM_CREATED" th:selected="${selectedAction == 'EXAM_CREATED'}">EXAM_CREATED</option>
                     <option value="EXAM_PUBLISHED" th:selected="${selectedAction == 'EXAM_PUBLISHED'}">EXAM_PUBLISHED</option>
@@ -32,7 +32,7 @@
 
             <div style="flex: 1; min-width: 180px;">
                 <label for="resourceType" class="form-label">Filter Resource</label>
-                <select name="resourceType" id="resourceType" class="form-control" onchange="this.form.submit()">
+                <select name="resourceType" id="resourceType" class="form-control font-mono" onchange="this.form.submit()">
                     <option value="ALL">All Resources</option>
                     <option value="EXAM" th:selected="${selectedResource == 'EXAM'}">EXAM</option>
                     <option value="QUESTION" th:selected="${selectedResource == 'QUESTION'}">QUESTION</option>
@@ -54,48 +54,52 @@
             </div>
 
             <div>
-                <a th:href="@{/admin/audit-logs}" class="btn btn-secondary">Reset Filters</a>
+                <a th:href="@{/admin/audit-logs}" class="btn btn-secondary font-mono">Reset Filters</a>
             </div>
         </form>
     </div>
 
     <!-- Audit Log Table -->
     <div class="card">
-        <div th:if="${#lists.isEmpty(logs)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
-            No audit records match the selected filter criteria.
+        <div th:if="${#lists.isEmpty(logs)}" class="empty-state-bento">
+            <div class="empty-state-ascii">
+   [?] NO_MATCHING_AUDIT_RECORDS
+   QUERY: FILTER_CRITERIA_EMPTY_RESULT
+            </div>
+            <p>No audit records match the selected filter criteria.</p>
         </div>
 
         <div th:if="${!#lists.isEmpty(logs)}" class="table-container" style="margin-bottom: 0;">
             <table class="table">
                 <thead>
                     <tr>
-                        <th style="width: 170px;">Timestamp</th>
+                        <th style="width: 180px;">Timestamp</th>
                         <th style="width: 180px;">Actor</th>
-                        <th style="width: 170px;">Action</th>
-                        <th style="width: 130px;">Resource</th>
+                        <th style="width: 180px;">Action</th>
+                        <th style="width: 140px;">Resource</th>
                         <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="l : ${logs}">
-                        <td th:text="${#temporals.format(l.timestamp, 'dd MMM yyyy HH:mm:ss')}">Time</td>
+                        <td class="font-mono" style="font-size: 0.8rem; color: var(--color-text-secondary);" th:text="${#temporals.format(l.timestamp, 'dd MMM yyyy HH:mm:ss')}">Time</td>
                         <td>
                             <strong th:text="${l.user != null ? l.user.name : 'SYSTEM'}">Actor</strong>
-                            <div th:if="${l.user != null}" style="font-size: var(--font-size-xs); color: var(--color-muted);" th:text="${l.user.email}"></div>
+                            <div th:if="${l.user != null}" class="font-mono text-muted" style="font-size: var(--font-size-xs);" th:text="${l.user.email}"></div>
                         </td>
                         <td>
-                            <span class="badge" style="background: var(--color-surface-hover); color: var(--color-primary);" th:text="${l.action}">ACTION</span>
+                            <span class="badge font-mono badge-submitted" th:text="${l.action}">ACTION</span>
                         </td>
                         <td>
-                            <span th:if="${l.resourceType != null}" class="badge" style="background: var(--color-surface-hover); color: var(--color-muted);"
+                            <span th:if="${l.resourceType != null}" class="badge font-mono badge-draft"
                                   th:text="${l.resourceType} + (${l.resourceId != null} ? ' #' + ${l.resourceId} : '')">RESOURCE</span>
-                            <span th:if="${l.resourceType == null}" style="color: var(--color-muted); font-size: var(--font-size-xs);">-</span>
+                            <span th:if="${l.resourceType == null}" class="font-mono text-muted" style="font-size: var(--font-size-xs);">-</span>
                         </td>
                         <td>
                             <span th:text="${l.description}">Audit description</span>
-                            <div th:if="${l.previousValue != null or l.updatedValue != null}" style="font-size: var(--font-size-xs); margin-top: var(--space-1); color: var(--color-muted);">
-                                <span th:if="${l.previousValue != null}">Prev: <span th:text="${l.previousValue}"></span></span>
-                                <span th:if="${l.updatedValue != null}" style="margin-left: var(--space-2);">New: <span th:text="${l.updatedValue}"></span></span>
+                            <div th:if="${l.previousValue != null or l.updatedValue != null}" class="font-mono" style="font-size: var(--font-size-xs); margin-top: var(--space-1); color: var(--color-muted);">
+                                <span th:if="${l.previousValue != null}">Prev: <span class="text-rose" th:text="${l.previousValue}"></span></span>
+                                <span th:if="${l.updatedValue != null}" style="margin-left: var(--space-2);">New: <span class="text-emerald" th:text="${l.updatedValue}"></span></span>
                             </div>
                         </td>
                     </tr>

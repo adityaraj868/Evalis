@@ -6,17 +6,25 @@
 </head>
 <body>
 <section>
-    <div style="max-width: 600px; margin: var(--space-8) auto; text-align: center;">
+    <div style="max-width: 640px; margin: var(--space-8) auto; text-align: center;">
         <div class="card">
-            <div style="font-size: 3rem; margin-bottom: var(--space-2);">🔒</div>
-            <h1 class="page-title" style="color: var(--color-danger);">Access Denied (403)</h1>
-            <p class="page-subtitle" style="margin-bottom: var(--space-6);">
+            <div class="ascii-art-box rose-accent">
++---------------------------------------+
+|  [x] 403 - PRIVILEGE_ACCESS_DENIED    |
+|  SECURITY: INSUFFICIENT_PERMISSIONS   |
++---------------------------------------+
+ [!] HORIZONTAL_ESCALATION_BLOCKED</div>
+            <h1 class="page-title text-rose">Access Denied (403)</h1>
+            <p class="page-subtitle" style="margin-bottom: var(--space-4);">
                 You do not have authorization to access this protected resource.
             </p>
-            <p style="color: var(--color-text-secondary); margin-bottom: var(--space-6);">
+            <p style="color: var(--color-text-secondary); margin-bottom: var(--space-6); font-size: 0.85rem;">
                 If you believe this is in error, please contact your administrator or sign in with an account having the proper role.
             </p>
-            <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+            <div style="display: flex; justify-content: center; gap: var(--space-3);">
+                <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+                <a th:href="@{/login}" class="btn btn-secondary">Switch Account</a>
+            </div>
         </div>
     </div>
 </section>

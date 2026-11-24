@@ -8,6 +8,13 @@
 <body>
 <section>
     <div class="card">
+        <div class="ascii-art-box" style="margin-top: 0; margin-bottom: 1.5rem; display: block; text-align: left;">
+ +------------------------------------------------------------------------+
+ | [ EVALIS // ACADEMIC_DISPUTE_RESOLUTION_SYSTEM_V3.4 ]                 |
+ | STATUS: OPERATIONAL  ::  INTEGRITY_CHECK: PASS  ::  PORT: 8080         |
+ +------------------------------------------------------------------------+
+  /\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\</div>
+
         <div class="page-header">
             <h1 class="page-title">Exam Question Re-evaluation Portal</h1>
             <p class="page-subtitle">Digitized Post-Examination Review & Quality Assurance Workflow</p>
@@ -23,33 +30,33 @@
                 <a th:href="@{/login}" class="btn btn-primary">Sign In to Portal</a>
             </div>
 
-            <div style="border-top: 1px solid var(--color-border); padding-top: var(--space-6);">
-                <h3 style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-bottom: var(--space-3);">
+            <div style="border-top: 1px solid var(--bento-border); padding-top: var(--space-6);">
+                <h3 style="font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); margin-bottom: var(--space-3); color: #F8FAFC;">
                     Portal Roles & Workflows
                 </h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4);">
-                    <div style="border: 1px solid var(--color-border); padding: var(--space-4); border-radius: var(--radius-md);">
-                        <strong style="color: var(--color-primary);">Student Portal</strong>
-                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0;">
+                    <div class="bento-card" style="padding: var(--space-4); margin-bottom: 0;">
+                        <div class="badge badge-submitted font-mono" style="margin-bottom: var(--space-2);">Student Portal</div>
+                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0; line-height: 1.5;">
                             View question-wise marks, identify discrepancies, submit justification-backed review claims, and track real-time resolution.
                         </p>
-                        <span style="font-size: var(--font-size-xs); color: var(--color-muted);">Login: student@example.com / student123</span>
+                        <span class="font-mono text-muted" style="font-size: 0.725rem;">student@example.com / student123</span>
                     </div>
 
-                    <div style="border: 1px solid var(--color-border); padding: var(--space-4); border-radius: var(--radius-md);">
-                        <strong style="color: var(--color-primary);">Faculty Portal</strong>
-                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0;">
+                    <div class="bento-card" style="padding: var(--space-4); margin-bottom: 0;">
+                        <div class="badge badge-under-review font-mono" style="margin-bottom: var(--space-2);">Faculty Portal</div>
+                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0; line-height: 1.5;">
                             Manage exams, view question request clusters, review student submissions, award revised marks, and retain grading authority.
                         </p>
-                        <span style="font-size: var(--font-size-xs); color: var(--color-muted);">Login: faculty@example.com / faculty123</span>
+                        <span class="font-mono text-muted" style="font-size: 0.725rem;">faculty@example.com / faculty123</span>
                     </div>
 
-                    <div style="border: 1px solid var(--color-border); padding: var(--space-4); border-radius: var(--radius-md);">
-                        <strong style="color: var(--color-primary);">Administration</strong>
-                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0;">
+                    <div class="bento-card" style="padding: var(--space-4); margin-bottom: 0;">
+                        <div class="badge badge-approved font-mono" style="margin-bottom: var(--space-2);">Administration</div>
+                        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin: var(--space-2) 0; line-height: 1.5;">
                             Oversee student registry, exam lifecycle, and inspect tamper-evident audit logs across the institution.
                         </p>
-                        <span style="font-size: var(--font-size-xs); color: var(--color-muted);">Login: admin@example.com / admin123</span>
+                        <span class="font-mono text-muted" style="font-size: 0.725rem;">admin@example.com / admin123</span>
                     </div>
                 </div>
             </div>

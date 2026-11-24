@@ -1,0 +1,630 @@
+/* ==========================================================================
+   Neon x Bunpro Hybrid Design System
+   Combines Bunpro bento-grid cards & crisp semantic pill badges with
+   Neon Database hairline borders (#00E599 accents & JetBrains Mono telemetry).
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Neon Phosphor & Canvas Tokens */
+  --canvas-bg: #0B0D12;
+  --color-primary: #00E599;          /* Neon Phosphor Emerald */
+  --color-primary-hover: #00F5A3;
+  --color-primary-text: #051B11;
+  --color-primary-glow: rgba(0, 229, 153, 0.35);
+  --color-primary-light: rgba(0, 229, 153, 0.08);
+
+  /* Bento Elevated Surface Tokens */
+  --bento-bg: rgba(18, 22, 31, 0.85);
+  --bento-bg-hover: rgba(22, 28, 40, 0.95);
+  --bento-border: rgba(255, 255, 255, 0.08);
+  --bento-border-hover: rgba(0, 229, 153, 0.35);
+
+  --color-background: #0B0D12;
+  --color-surface: rgba(18, 22, 31, 0.85);
+  --color-surface-hover: rgba(255, 255, 255, 0.04);
+  --color-text: #F1F5F9;             /* WCAG AAA high contrast against #0B0D12 */
+  --color-text-secondary: #94A3B8;   /* Slate 400 */
+  --color-muted: #64748B;            /* Slate 500 */
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-focus: #00E599;
+
+  /* Bunpro Semantic Pill Accents */
+  --color-success: #00E599;          /* Emerald */
+  --color-success-bg: rgba(0, 229, 153, 0.12);
+  --color-success-border: rgba(0, 229, 153, 0.3);
+
+  --color-warning: #FBBF24;          /* Amber */
+  --color-warning-bg: rgba(251, 191, 36, 0.12);
+  --color-warning-border: rgba(251, 191, 36, 0.3);
+
+  --color-danger: #FB7185;           /* Rose */
+  --color-danger-bg: rgba(251, 113, 133, 0.12);
+  --color-danger-border: rgba(251, 113, 133, 0.3);
+
+  --color-info: #38BDF8;             /* Cyan */
+  --color-info-bg: rgba(56, 189, 248, 0.12);
+  --color-info-border: rgba(56, 189, 248, 0.3);
+
+  --color-neutral: #94A3B8;
+  --color-neutral-bg: rgba(148, 163, 184, 0.12);
+  --color-neutral-border: rgba(148, 163, 184, 0.25);
+
+  /* Typography */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Sizing & Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* High Precision Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 153, 0.08);
+}
+
+/* Base Body & Dot-Matrix Canvas Layer */
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--canvas-bg);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+  min-height: 100vh;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Full-viewport ASCII art background canvas */
+#ascii-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.85;
+}
+
+/* Ensure UI elements sit above the ASCII canvas */
+.app-header,
+.app-container,
+.main-content,
+footer,
+.modal,
+.alert {
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Header / Navbar (Glassmorphic Top Bar)
+   -------------------------------------------------------------------------- */
+.app-header {
+  background: rgba(11, 13, 18, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--bento-border);
+  padding: 0.85rem 1.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.brand-title {
+  color: #F1F5F9;
+  font-family: var(--font-family-base);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: opacity 0.15s ease;
+}
+
+.brand-title:hover {
+  opacity: 0.9;
+}
+
+.brand-title svg {
+  stroke: var(--color-primary);
+  filter: drop-shadow(0 0 8px rgba(0, 229, 153, 0.5));
+}
+
+.brand-title span {
+  background: linear-gradient(135deg, #FFFFFF 30%, #00E599 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Sidebar Navigation (Bento Glass Panel)
+   -------------------------------------------------------------------------- */
+.sidebar {
+  background: rgba(14, 18, 25, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-right: 1px solid var(--bento-border);
+  padding: 1.5rem 0.85rem;
+  width: 250px;
+}
+
+.sidebar .nav-link {
+  color: var(--color-text-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.sidebar .nav-link.active {
+  background: rgba(0, 229, 153, 0.08);
+  color: var(--color-primary);
+  border-color: rgba(0, 229, 153, 0.25);
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(0, 229, 153, 0.06), inset 0 0 8px rgba(0, 229, 153, 0.04);
+}
+
+/* --------------------------------------------------------------------------
+   Bento Grid Cards & Containers
+   -------------------------------------------------------------------------- */
+.card, .bento-card {
+  background: var(--bento-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--bento-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover, .bento-card:hover {
+  border-color: var(--bento-border-hover);
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.6),
+              0 0 24px rgba(0, 229, 153, 0.08),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.card-title {
+  color: #F8FAFC;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  color: #FFFFFF;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.page-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Stat Cards (Telemetry Grid) */
+.card .font-mono-stat {
+  font-family: var(--font-family-mono);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-top: 0.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Bunpro Crisp Pill Badges
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  line-height: 1.2;
+}
+
+.badge::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* Request Status Badges */
+.badge-submitted {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+  border-color: var(--color-info-border);
+}
+
+.badge-under-review {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border-color: var(--color-warning-border);
+}
+
+.badge-approved, .badge-completed {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border-color: var(--color-success-border);
+}
+
+.badge-rejected {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-color: var(--color-danger-border);
+}
+
+/* Exam State Badges */
+.badge-draft {
+  background-color: var(--color-neutral-bg);
+  color: var(--color-neutral);
+  border-color: var(--color-neutral-border);
+}
+
+.badge-published {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+  border-color: var(--color-info-border);
+}
+
+.badge-reeval-open {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border-color: var(--color-success-border);
+}
+
+.badge-reeval-closed {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border-color: var(--color-warning-border);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons (Neon Phosphor & Hairline Accents)
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-base);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary {
+  background-color: #00E599;
+  color: #051B11 !important;
+  font-weight: 600;
+  border: 1px solid #00E599;
+  box-shadow: 0 0 16px rgba(0, 229, 153, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary:hover {
+  background-color: #00F5A3;
+  color: #03140C !important;
+  box-shadow: 0 0 24px rgba(0, 229, 153, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #F1F5F9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 229, 153, 0.4);
+  color: #00E599;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background-color: rgba(251, 113, 133, 0.15);
+  color: #FB7185;
+  border: 1px solid rgba(251, 113, 133, 0.35);
+}
+
+.btn-danger:hover {
+  background-color: rgba(251, 113, 133, 0.25);
+  border-color: #FB7185;
+  color: #FFE4E6;
+  box-shadow: 0 0 16px rgba(251, 113, 133, 0.3);
+}
+
+.btn-sm {
+  padding: 0.25rem 0.65rem;
+  font-size: 0.775rem;
+  border-radius: var(--radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Tables (Hairline Rows & Telemetry Columns)
+   -------------------------------------------------------------------------- */
+.table-container {
+  overflow-x: auto;
+  background: var(--bento-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--bento-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  margin-bottom: 1.5rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  text-align: left;
+  color: var(--color-text);
+}
+
+.table th {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-mono);
+  font-size: 0.725rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--bento-border);
+}
+
+.table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #F1F5F9;
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  transition: background-color 0.12s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(0, 229, 153, 0.035);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --------------------------------------------------------------------------
+   Forms (Dark Bento Inputs with Emerald Focus)
+   -------------------------------------------------------------------------- */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #E2E8F0;
+  margin-bottom: 0.35rem;
+}
+
+.form-control, .form-select, select.form-control {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.875rem;
+  font-family: var(--font-family-base);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  background-color: rgba(14, 18, 26, 0.9);
+  color: #F8FAFC;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.form-control::placeholder {
+  color: #475569;
+}
+
+.form-control:focus, .form-select:focus, select.form-control:focus {
+  outline: none;
+  border-color: #00E599;
+  background-color: rgba(18, 24, 34, 0.98);
+  box-shadow: 0 0 0 3px rgba(0, 229, 153, 0.2);
+  color: #FFFFFF;
+}
+
+.form-control:disabled, .form-control[readonly] {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.06);
+  color: #64748B;
+}
+
+.form-error, .invalid-feedback {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  color: #FB7185;
+  margin-top: 0.35rem;
+}
+
+.form-helper {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: 0.35rem;
+}
+
+/* --------------------------------------------------------------------------
+   Alerts & Notifications
+   -------------------------------------------------------------------------- */
+.alert {
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid transparent;
+  backdrop-filter: blur(8px);
+}
+
+.alert-success {
+  background-color: var(--color-success-bg);
+  color: #A7F3D0;
+  border-color: var(--color-success-border);
+}
+
+.alert-danger {
+  background-color: var(--color-danger-bg);
+  color: #FECDD3;
+  border-color: var(--color-danger-border);
+}
+
+.alert-warning {
+  background-color: var(--color-warning-bg);
+  color: #FDE68A;
+  border-color: var(--color-warning-border);
+}
+
+.alert-info {
+  background-color: var(--color-info-bg);
+  color: #BAE6FD;
+  border-color: var(--color-info-border);
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+footer {
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.775rem;
+  font-family: var(--font-family-mono);
+  color: var(--color-muted);
+  border-top: 1px solid var(--bento-border);
+  background: rgba(11, 13, 18, 0.9);
+  margin-top: auto;
+}
+
+/* --------------------------------------------------------------------------
+   ASCII Art Centerpieces & Error View Displays
+   -------------------------------------------------------------------------- */
+.ascii-art-box {
+  font-family: var(--font-family-mono);
+  font-size: 0.725rem;
+  line-height: 1.2;
+  color: #00E599;
+  text-shadow: 0 0 14px rgba(0, 229, 153, 0.4);
+  background: rgba(0, 229, 153, 0.04);
+  border: 1px solid rgba(0, 229, 153, 0.25);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem auto;
+  white-space: pre;
+  display: inline-block;
+  text-align: left;
+  user-select: none;
+  box-shadow: inset 0 0 20px rgba(0, 229, 153, 0.05);
+}
+
+.ascii-art-box.rose-accent {
+  color: #FB7185;
+  text-shadow: 0 0 14px rgba(251, 113, 133, 0.4);
+  background: rgba(251, 113, 133, 0.04);
+  border-color: rgba(251, 113, 133, 0.25);
+  box-shadow: inset 0 0 20px rgba(251, 113, 133, 0.05);
+}
+
+.ascii-art-box.amber-accent {
+  color: #FBBF24;
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.04);
+  border-color: rgba(251, 191, 36, 0.25);
+  box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.05);
+}
+
+/* Empty States */
+.empty-state-bento {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  color: var(--color-muted);
+}
+
+.empty-state-ascii {
+  font-family: var(--font-family-mono);
+  font-size: 0.7rem;
+  line-height: 1.25;
+  color: #475569;
+  margin-bottom: 1.25rem;
+  white-space: pre;
+  user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   Utility Classes
+   -------------------------------------------------------------------------- */
+.font-mono {
+  font-family: var(--font-family-mono) !important;
+  letter-spacing: -0.01em;
+}
+
+.text-emerald {
+  color: #00E599 !important;
+}
+
+.text-cyan {
+  color: #38BDF8 !important;
+}
+
+.text-amber {
+  color: #FBBF24 !important;
+}
+
+.text-rose {
+  color: #FB7185 !important;
+}
+
+.border-hairline {
+  border: 1px solid var(--bento-border) !important;
+}

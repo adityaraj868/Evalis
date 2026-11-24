@@ -16,8 +16,8 @@
             <p class="page-subtitle">Subject: <span th:text="${exam.subject}">CS</span> &bull; Status: <span th:replace="~{fragments/badges :: examStatus(${exam.status})}"></span></p>
         </div>
         <div class="card" style="margin-bottom: 0; padding: var(--space-3) var(--space-5); text-align: right;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">Total Score</div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary);" th:text="${result.totalMarks}">32.0</div>
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Score</div>
+            <div class="font-mono text-emerald font-mono-stat" th:text="${result.totalMarks}">32.0</div>
         </div>
     </div>
 
@@ -46,15 +46,15 @@
                 </thead>
                 <tbody>
                     <tr th:each="q : ${questions}">
-                        <td><strong>Q<span th:text="${q.questionNumber}">1</span></strong></td>
+                        <td><strong class="font-mono">Q<span th:text="${q.questionNumber}">1</span></strong></td>
                         <td th:text="${q.questionText}">Description of question</td>
                         <td style="text-align: center;">
-                            <strong style="color: var(--color-text);"
+                            <strong class="font-mono text-emerald"
                                     th:text="${questionMarksMap.get(q.id) != null ? questionMarksMap.get(q.id) : '0.0'}">
                                 0.0
                             </strong>
                         </td>
-                        <td style="text-align: center; color: var(--color-muted);" th:text="${q.maxMarks}">10.0</td>
+                        <td class="font-mono" style="text-align: center; color: var(--color-muted);" th:text="${q.maxMarks}">10.0</td>
                         <td style="text-align: right;">
                             <!-- Already requested -->
                             <span th:if="${existingRequestsMap.get(q.id)}" class="badge badge-under-review">

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'requests')}">
 <head>
-    <title>Review Request #<span th:text="${req.id}">1</span> - Faculty</title>
+    <title th:text="'Review Request #' + ${req.id} + ' - Faculty'">Review Request - Faculty</title>
 </head>
 <body>
 <section>
@@ -24,24 +24,24 @@
     <div class="card">
         <h2 class="card-title">Claim Context</h2>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); background: var(--color-surface-hover); padding: var(--space-4); border-radius: var(--radius-md);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bento-border); padding: var(--space-4); border-radius: var(--radius-md);">
             <div>
-                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Examination</div>
+                <div class="font-mono" style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Examination</div>
                 <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);" th:text="${req.exam.name}">Data Structures</div>
             </div>
             <div>
-                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Question</div>
-                <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);">Question <span th:text="${req.question.questionNumber}">4</span></div>
+                <div class="font-mono" style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Question</div>
+                <div class="font-mono" style="font-weight: var(--font-weight-semibold); color: var(--color-text);">Question <span th:text="${req.question.questionNumber}">4</span></div>
             </div>
             <div>
-                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Current Marks</div>
-                <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);">
+                <div class="font-mono" style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Current Marks</div>
+                <div class="font-mono text-emerald" style="font-weight: var(--font-weight-semibold);">
                     <span th:text="${currentMark}">2.0</span> / <span th:text="${req.question.maxMarks}">10.0</span>
                 </div>
             </div>
             <div>
-                <div style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Submitted Date</div>
-                <div style="font-weight: var(--font-weight-semibold); color: var(--color-text);" th:text="${#temporals.format(req.createdAt, 'dd MMM yyyy HH:mm')}">Date</div>
+                <div class="font-mono" style="font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase;">Submitted Date</div>
+                <div class="font-mono" style="font-weight: var(--font-weight-semibold); color: var(--color-text-secondary); font-size: 0.85rem;" th:text="${#temporals.format(req.createdAt, 'dd MMM yyyy HH:mm')}">Date</div>
             </div>
         </div>
 

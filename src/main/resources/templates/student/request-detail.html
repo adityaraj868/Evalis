@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: main(~{::title}, ~{::section}, 'requests')}">
 <head>
-    <title>Request Tracking #<span th:text="${req.id}">1</span></title>
+    <title th:text="'Request Tracking #' + ${req.id}">Request Tracking</title>
 </head>
 <body>
 <section>

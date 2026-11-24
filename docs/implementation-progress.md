@@ -47,3 +47,72 @@ Tracking against [implementation-plan.md](file:///home/epsilon/clg/Enterprise/im
   - Faculty review persistence and history linkage
   - AuditLog recording and chronological ordering
 - Exit condition verified: Schema starts cleanly with Hibernate 6, all 10 tests pass without errors or warnings.
+
+---
+
+## Phase 2 — Authentication & Authorization: COMPLETED
+- RBAC (`STUDENT`, `FACULTY`, `ADMIN`), method security, IDOR protection, custom exception handlers.
+- Exit condition verified: SecurityAccessTests (8 tests) passing.
+
+---
+
+## Phase 3 — Examination & Question Management: COMPLETED
+- Exam state machine (`DRAFT` → `PUBLISHED` → `RE_EVALUATION_OPEN` → `CLOSED` → `ARCHIVED`).
+- Exit condition verified: ExamLifecycleTests (11 tests) passing.
+
+---
+
+## Phase 4 — Marks Management: COMPLETED
+- Question-level marks recording, bounds checking, atomic total recalculation.
+- Exit condition verified: MarksManagementTests (6 tests) passing.
+
+---
+
+## Phase 5 — Re-evaluation Request Core: COMPLETED
+- Window checking, reason validation, composite duplicate constraint (`UNIQUE(student_id, exam_id, question_id)`).
+- Exit condition verified: RecheckRequestCoreTests (9 tests) passing.
+
+---
+
+## Phase 6 — Request Tracking: COMPLETED
+- Status progression (`SUBMITTED` → `UNDER_REVIEW`), student tracking portal.
+- Exit condition verified: RequestTrackingTests (4 tests) passing.
+
+---
+
+## Phase 7 — Faculty Review Workflow: COMPLETED
+- Decision adjudication (`APPROVED`/`REJECTED`), atomic score harmonization, decision immutability.
+- Exit condition verified: FacultyReviewWorkflowTests (7 tests) passing.
+
+---
+
+## Phase 8 — Analytics: COMPLETED
+- Single-query dispute aggregation, dispute threshold alerts, zero-division protection.
+- Exit condition verified: QuestionAnalyticsTests (5 tests) passing.
+
+---
+
+## Phase 9 — Audit Logs: COMPLETED
+- Centralized structured audit logging, multi-criteria filtering, `@EntityGraph` optimization.
+- Exit condition verified: AuditTrailTests (5 tests) passing.
+
+---
+
+## Phase 10 — UI Polish (Bunpro x Neon Hybrid Design): COMPLETED
+- Bunpro bento-grid cards and crisp semantic pill badges.
+- Neon Database razor-sharp hairline borders, `#00E599` phosphor-emerald accents, dot-matrix canvas, `JetBrains Mono` telemetry.
+- Ambient architectural ASCII art background (`ascii-bg.js`) throttled to 24 FPS with cursor proximity reaction.
+- Architectural ASCII art centerpieces for `400`, `403`, `404` error views and empty states.
+- Exit condition verified: All templates styled, responsive, accessible, zero regressions.
+
+---
+
+## Phase 11 — Testing & Hardening: COMPLETED
+- Comprehensive automated verification across unit, repository, service integration, and security layers.
+- Exit condition verified: 67 tests across 11 test suites passing with 100% success rate.
+
+---
+
+## Phase 12 — Documentation & Demo: COMPLETED
+- Complete architectural documentation, UML vector diagrams, viva notes, interactive demo script, and final submission report.
+- Exit condition verified: All documentation cataloged and final reports generated.

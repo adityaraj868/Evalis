@@ -11,38 +11,34 @@
         <p class="page-subtitle">View examination results and manage your re-evaluation requests</p>
     </div>
 
-    <!-- Stat Summary Cards -->
+    <!-- Stat Summary Cards (Bento Telemetry Grid) -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Exams Enrolled
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
-                 th:text="${results.size()}">0</div>
+            <div class="font-mono text-emerald font-mono-stat" th:text="${results.size()}">0</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Pending Requests
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-warning); margin-top: var(--space-1);"
-                 th:text="${pendingCount}">0</div>
+            <div class="font-mono text-amber font-mono-stat" th:text="${pendingCount}">0</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Approved Reviews
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-success); margin-top: var(--space-1);"
-                 th:text="${approvedCount}">0</div>
+            <div class="font-mono text-emerald font-mono-stat" th:text="${approvedCount}">0</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Rejected Reviews
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-danger); margin-top: var(--space-1);"
-                 th:text="${rejectedCount}">0</div>
+            <div class="font-mono text-rose font-mono-stat" th:text="${rejectedCount}">0</div>
         </div>
     </div>
 
@@ -50,11 +46,17 @@
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
             <h2 class="card-title" style="margin-bottom: 0;">My Examinations</h2>
-            <a th:href="@{/student/exams}" class="btn btn-secondary btn-sm">View All</a>
+            <a th:href="@{/student/exams}" class="btn btn-secondary btn-sm font-mono">View All &rarr;</a>
         </div>
 
-        <div th:if="${#lists.isEmpty(results)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
-            No examination results found.
+        <div th:if="${#lists.isEmpty(results)}" class="empty-state-bento">
+            <div class="empty-state-ascii">
+   .---.
+  /     \    [ NO_ACTIVE_EXAM_RESULTS ]
+ | () () |   TELEMETRY: RECORDS_EMPTY
+  \  _  /
+   '---'</div>
+            <p>No examination results found.</p>
         </div>
 
         <div th:if="${!#lists.isEmpty(results)}" class="table-container" style="margin-bottom: 0;">
@@ -75,7 +77,7 @@
                         <td>
                             <div th:replace="~{fragments/badges :: examStatus(${r.exam.status})}"></div>
                         </td>
-                        <td><span style="font-weight: var(--font-weight-semibold);" th:text="${r.totalMarks}">0.0</span></td>
+                        <td><span class="font-mono text-emerald" style="font-weight: 600;" th:text="${r.totalMarks}">0.0</span></td>
                         <td>
                             <a th:href="@{'/student/exams/' + ${r.exam.id}}" class="btn btn-primary btn-sm">View Breakdown</a>
                         </td>
@@ -89,11 +91,16 @@
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
             <h2 class="card-title" style="margin-bottom: 0;">Recent Re-evaluation Requests</h2>
-            <a th:href="@{/student/requests}" class="btn btn-secondary btn-sm">View All</a>
+            <a th:href="@{/student/requests}" class="btn btn-secondary btn-sm font-mono">View All &rarr;</a>
         </div>
 
-        <div th:if="${#lists.isEmpty(requests)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
-            You have not submitted any re-evaluation requests yet.
+        <div th:if="${#lists.isEmpty(requests)}" class="empty-state-bento">
+            <div class="empty-state-ascii">
+   +-----+
+   | - - |   [ NO_DISPUTE_REQUESTS_LOGGED ]
+   |  =  |   ALL_EXAMINATIONS_NOMINAL
+   +-----+</div>
+            <p>You have not submitted any re-evaluation requests yet.</p>
         </div>
 
         <div th:if="${!#lists.isEmpty(requests)}" class="table-container" style="margin-bottom: 0;">
@@ -109,9 +116,9 @@
                 </thead>
                 <tbody>
                     <tr th:each="req : ${requests}">
-                        <td th:text="${req.exam.name}">Exam</td>
-                        <td>Q<span th:text="${req.question.questionNumber}">1</span></td>
-                        <td th:text="${#temporals.format(req.createdAt, 'dd MMM yyyy HH:mm')}">Date</td>
+                        <td><strong th:text="${req.exam.name}">Exam</strong></td>
+                        <td class="font-mono">Q<span th:text="${req.question.questionNumber}">1</span></td>
+                        <td class="font-mono" style="color: var(--color-text-secondary); font-size: 0.8rem;" th:text="${#temporals.format(req.createdAt, 'dd MMM yyyy HH:mm')}">Date</td>
                         <td>
                             <div th:replace="~{fragments/badges :: requestStatus(${req.status})}"></div>
                         </td>

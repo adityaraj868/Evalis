@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: exam-review-portal
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: DB_HOST
+        fromDatabase:
+          name: exam-review-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: exam-review-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: exam-review-db
+          property: database
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: exam-review-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: exam-review-db
+          property: password
+
+databases:
+  - name: exam-review-db
+    databaseName: exam_review_db
+    user: examuser
+    plan: free

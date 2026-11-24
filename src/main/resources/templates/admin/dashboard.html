@@ -11,77 +11,78 @@
         <p class="page-subtitle">System-wide monitoring, user registry, and compliance audit trail</p>
     </div>
 
-    <!-- Stats Grid -->
+    <!-- Stats Grid (Bento Telemetry Cards) -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Registered Students
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
-                 th:text="${studentCount}">2</div>
+            <div class="font-mono text-emerald font-mono-stat" th:text="${studentCount}">2</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Faculty Staff
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
-                 th:text="${facultyCount}">1</div>
+            <div class="font-mono text-emerald font-mono-stat" th:text="${facultyCount}">1</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Total Examinations
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
-                 th:text="${examCount}">1</div>
+            <div class="font-mono text-cyan font-mono-stat" th:text="${examCount}">1</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Re-evaluation Requests
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-warning); margin-top: var(--space-1);"
-                 th:text="${requestCount}">1</div>
+            <div class="font-mono text-amber font-mono-stat" th:text="${requestCount}">1</div>
         </div>
     </div>
 
     <!-- Quick Links -->
-    <div style="display: flex; gap: var(--space-4); margin-bottom: var(--space-6);">
-        <a th:href="@{/admin/students}" class="btn btn-secondary">Manage Students Registry</a>
-        <a th:href="@{/admin/audit-logs}" class="btn btn-secondary">View Full Audit Trail</a>
+    <div style="display: flex; gap: var(--space-4); margin-bottom: var(--space-6); flex-wrap: wrap;">
+        <a th:href="@{/admin/students}" class="btn btn-secondary font-mono">Manage Students Registry &rarr;</a>
+        <a th:href="@{/admin/audit-logs}" class="btn btn-secondary font-mono">View Full Audit Trail &rarr;</a>
     </div>
 
     <!-- Recent Audit Activity -->
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
             <h2 class="card-title" style="margin-bottom: 0;">Recent Audit Trail</h2>
-            <a th:href="@{/admin/audit-logs}" class="btn btn-secondary btn-sm">All Logs</a>
+            <a th:href="@{/admin/audit-logs}" class="btn btn-secondary btn-sm font-mono">All Logs &rarr;</a>
         </div>
 
-        <div th:if="${#lists.isEmpty(recentLogs)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
-            No audit records found.
+        <div th:if="${#lists.isEmpty(recentLogs)}" class="empty-state-bento">
+            <div class="empty-state-ascii">
+   +-----+
+   | ... |   [ AUDIT_LOG_EMPTY ]
+   |  _  |   NO_RECENT_SECURITY_EVENTS
+   +-----+</div>
+            <p>No audit records found.</p>
         </div>
 
         <div th:if="${!#lists.isEmpty(recentLogs)}" class="table-container" style="margin-bottom: 0;">
             <table class="table">
                 <thead>
                     <tr>
-                        <th style="width: 170px;">Timestamp</th>
+                        <th style="width: 180px;">Timestamp</th>
                         <th style="width: 180px;">Actor</th>
-                        <th style="width: 160px;">Action</th>
+                        <th style="width: 180px;">Action</th>
                         <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="l : ${recentLogs}">
-                        <td th:text="${#temporals.format(l.timestamp, 'dd MMM yyyy HH:mm:ss')}">Time</td>
+                        <td class="font-mono" style="font-size: 0.8rem; color: var(--color-text-secondary);" th:text="${#temporals.format(l.timestamp, 'dd MMM yyyy HH:mm:ss')}">Time</td>
                         <td>
                             <strong th:text="${l.user != null ? l.user.name : 'SYSTEM'}">Actor</strong>
-                            <span th:if="${l.user != null}" style="font-size: var(--font-size-xs); color: var(--color-muted);" th:text="'(' + ${l.user.role} + ')'"></span>
+                            <span th:if="${l.user != null}" class="font-mono text-muted" style="font-size: var(--font-size-xs);" th:text="'(' + ${l.user.role} + ')'"></span>
                         </td>
                         <td>
-                            <span class="badge" style="background: var(--color-surface-hover); color: var(--color-primary);" th:text="${l.action}">ACTION</span>
+                            <span class="badge font-mono badge-submitted" th:text="${l.action}">ACTION</span>
                         </td>
                         <td th:text="${l.description}">Description</td>
                     </tr>

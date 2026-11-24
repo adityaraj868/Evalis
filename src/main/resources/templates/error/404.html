@@ -6,14 +6,24 @@
 </head>
 <body>
 <section>
-    <div style="max-width: 600px; margin: var(--space-8) auto; text-align: center;">
+    <div style="max-width: 640px; margin: var(--space-8) auto; text-align: center;">
         <div class="card">
-            <div style="font-size: 3rem; margin-bottom: var(--space-2);">🔍</div>
-            <h1 class="page-title" style="color: var(--color-warning);">Not Found (404)</h1>
+            <div class="ascii-art-box">
++---------------------------------------+
+|  [?] 404 - RESOURCE_NOT_LOCATED       |
+|  TELEMETRY: TARGET_ENTITY_NULL        |
++---------------------------------------+
+     / \
+    /   \   [NOT_FOUND]
+   /_____\</div>
+            <h1 class="page-title text-emerald">Resource Not Found (404)</h1>
             <p class="page-subtitle" style="margin-bottom: var(--space-6);" th:text="${errorMessage ?: 'The requested resource was not found.'}">
                 The requested resource could not be found.
             </p>
-            <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+            <div style="display: flex; justify-content: center; gap: var(--space-3);">
+                <a th:href="@{/}" class="btn btn-primary">Return to Home</a>
+                <button onclick="window.history.back()" class="btn btn-secondary">Go Back</button>
+            </div>
         </div>
     </div>
 </section>

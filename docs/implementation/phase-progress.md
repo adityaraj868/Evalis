@@ -20,6 +20,9 @@
 | **Phase 7** | Faculty Review Workflow | `COMPLETED` | 2026-11-18 |
 | **Phase 8** | Question-wise Analytics | `COMPLETED` | 2026-11-18 |
 | **Phase 9** | Centralized Audit Trail | `COMPLETED` | 2026-11-18 |
+| **Phase 10** | UI Polish (Bunpro x Neon Hybrid Design) | `COMPLETED` | 2026-11-22 |
+| **Phase 11** | Testing & Hardening | `COMPLETED` | 2026-11-22 |
+| **Phase 12** | Documentation & Demo Deliverables | `COMPLETED` | 2026-11-22 |
 
 ---
 
@@ -165,6 +168,46 @@
 - **Files Modified**: `AuditLog.java`, `AuditLogRepository.java`, `AuditService.java`, `AdminController.java`, `templates/admin/audit-logs.html`.
 - **Tests Executed**: `AuditTrailTests` (5 tests passing).
 - **Documentation Updated**: `docs/implementation/phase-9.md`.
+
+---
+
+### Phase 10 — UI Polish (Bunpro x Neon Hybrid Design)
+- **Status**: `COMPLETED`
+- **Objectives**: Design system overhaul pairing Bunpro bento-grid cards and crisp semantic pill badges with Neon Database razor-sharp hairline borders, `#00E599` phosphor-emerald accents, dot-matrix canvas, `JetBrains Mono` telemetry, and an ambient architectural ASCII art background.
+- **Completed Features**:
+  - `theme-neon-bunpro.css`: High-contrast dark mode (`#0B0D12` canvas with 24px dot-matrix, `#00E599` primary phosphor glow, `#F1F5F9` text exceeding WCAG AAA contrast, Bunpro semantic pill badges with glowing dot indicators).
+  - Ambient ASCII Art Engine (`ascii-bg.js`): Fixed full-viewport background canvas layer behind UI elements (`z-index: 0`, `pointer-events: none`) with architectural wave shimmer throttled to 24 FPS and cursor proximity reaction.
+  - Custom branded error views (`400`, `403`, `404`) featuring architectural ASCII art centerpieces, telemetry diagnostics, and navigation fallback actions.
+  - Bento stat telemetry cards with `JetBrains Mono` metric values across Student, Faculty, and Admin dashboards.
+  - Monospace formatting (`.font-mono`) applied to request IDs, timestamps, question indices, score metrics, and audit action pills.
+  - Stylish empty-state containers with ASCII glyphs.
+- **Files Created**: `src/main/resources/static/css/theme-neon-bunpro.css`, `src/main/resources/static/js/ascii-bg.js`.
+- **Files Modified**: `layout.html`, `navbar.html`, `sidebar.html`, `footer.html`, `index.html`, `login.html`, `400.html`, `403.html`, `404.html`, `student/dashboard.html`, `student/exam-detail.html`, `faculty/dashboard.html`, `faculty/analytics.html`, `faculty/request-review.html`, `admin/dashboard.html`, `admin/audit-logs.html`.
+- **Tests Executed**: All 67 automated tests passing with 0 regressions.
+
+---
+
+### Phase 11 — Testing & Hardening
+- **Status**: `COMPLETED`
+- **Objectives**: Comprehensive verification spanning unit, repository, service integration, and security layers with boundary checking and concurrency duplicate handling.
+- **Completed Features**:
+  - Unit and integration tests covering entire domain lifecycle.
+  - Concurrency & duplicate request prevention test (`RecheckRequestCoreTests`).
+  - Strict marks boundary validation tests ($0 \le \text{marks} \le \text{maxMarks}$).
+  - Role-based security and anti-IDOR tests (`SecurityAccessTests`).
+  - Automatic mark synchronization and atomic recalculation tests (`FacultyReviewWorkflowTests`).
+- **Tests Executed**: 67 automated tests across 11 test suites passing (100% success rate).
+
+---
+
+### Phase 12 — Documentation & Demo Deliverables
+- **Status**: `COMPLETED`
+- **Objectives**: Complete academic submission report, architectural diagrams, learning guide, viva preparation, and interactive demo script.
+- **Completed Features**:
+  - Full UML and architecture vector diagrams in `docs/diagrams/` (System Architecture, Layered Architecture, ER Diagram, Use Case Diagram, Sequence Diagrams, State Transition Diagrams).
+  - Learning and viva preparation package in `docs/learning/` (Project Learning Guide, Backend Request Lifecycle, Viva Prep & FAQs).
+  - Formal submission deliverables in `report_for_sub/` (`Exam_Review_System_Final_Report.docx`, `1024170148_1024170139_1024170002.pdf`).
+  - Interactive demonstration walkthrough in `docs/demo-script.md`.
 
 ---
 

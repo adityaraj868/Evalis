@@ -6,49 +6,45 @@
 </head>
 <body>
 <section>
-    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
         <div>
             <h1 class="page-title">Faculty Dashboard</h1>
             <p class="page-subtitle">Manage examinations, oversee re-evaluation requests, and inspect analytics</p>
         </div>
         <div style="display: flex; gap: var(--space-3);">
             <a th:href="@{/faculty/exams/new}" class="btn btn-primary btn-sm">+ Create Examination</a>
-            <a th:href="@{/faculty/analytics}" class="btn btn-secondary btn-sm">Question Analytics</a>
+            <a th:href="@{/faculty/analytics}" class="btn btn-secondary btn-sm font-mono">Question Analytics</a>
         </div>
     </div>
 
-    <!-- Stats Grid -->
+    <!-- Stats Grid (Bento Telemetry Cards) -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Open Re-evaluations
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-top: var(--space-1);"
-                 th:text="${activeExamsCount}">1</div>
+            <div class="font-mono text-emerald font-mono-stat" th:text="${activeExamsCount}">1</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Pending Reviews
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-warning); margin-top: var(--space-1);"
-                 th:text="${pendingCount}">1</div>
+            <div class="font-mono text-amber font-mono-stat" th:text="${pendingCount}">1</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Approved Decisions
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-success); margin-top: var(--space-1);"
-                 th:text="${approvedCount}">0</div>
+            <div class="font-mono text-emerald font-mono-stat" th:text="${approvedCount}">0</div>
         </div>
 
         <div class="card" style="margin-bottom: 0;">
-            <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase;">
+            <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.05em;">
                 Rejected Decisions
             </div>
-            <div style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-danger); margin-top: var(--space-1);"
-                 th:text="${rejectedCount}">0</div>
+            <div class="font-mono text-rose font-mono-stat" th:text="${rejectedCount}">0</div>
         </div>
     </div>
 
@@ -56,11 +52,17 @@
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
             <h2 class="card-title" style="margin-bottom: 0;">Examinations Overview</h2>
-            <a th:href="@{/faculty/exams}" class="btn btn-secondary btn-sm">Manage All</a>
+            <a th:href="@{/faculty/exams}" class="btn btn-secondary btn-sm font-mono">Manage All &rarr;</a>
         </div>
 
-        <div th:if="${#lists.isEmpty(exams)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
-            No examinations found. Create one using the button above.
+        <div th:if="${#lists.isEmpty(exams)}" class="empty-state-bento">
+            <div class="empty-state-ascii">
+   .---.
+  /     \    [ NO_EXAMINATIONS_CREATED ]
+ | () () |   TELEMETRY: DATABASE_NULL
+  \  _  /
+   '---'</div>
+            <p>No examinations found. Create one using the button above.</p>
         </div>
 
         <div th:if="${!#lists.isEmpty(exams)}" class="table-container" style="margin-bottom: 0;">
@@ -81,7 +83,7 @@
                         <td>
                             <div th:replace="~{fragments/badges :: examStatus(${e.status})}"></div>
                         </td>
-                        <td>
+                        <td class="font-mono" style="font-size: 0.8rem; color: var(--color-text-secondary);">
                             <span th:if="${e.reevaluationStart != null}"
                                   th:text="${#temporals.format(e.reevaluationStart, 'dd MMM')} + ' - ' + ${#temporals.format(e.reevaluationEnd, 'dd MMM yyyy')}">
                                 Dates
@@ -101,18 +103,23 @@
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
             <h2 class="card-title" style="margin-bottom: 0;">Pending Re-evaluation Submissions</h2>
-            <a th:href="@{/faculty/requests}" class="btn btn-secondary btn-sm">Open Inbox</a>
+            <a th:href="@{/faculty/requests}" class="btn btn-secondary btn-sm font-mono">Open Inbox &rarr;</a>
         </div>
 
-        <div th:if="${#lists.isEmpty(recentRequests)}" style="color: var(--color-muted); padding: var(--space-4) 0;">
-            No re-evaluation requests received yet.
+        <div th:if="${#lists.isEmpty(recentRequests)}" class="empty-state-bento">
+            <div class="empty-state-ascii">
+   +-----+
+   |  *  |   [ INBOX_ZERO // NOMINAL ]
+   |  -  |   NO_PENDING_DISPUTE_REVIEWS
+   +-----+</div>
+            <p>No re-evaluation requests received yet.</p>
         </div>
 
         <div th:if="${!#lists.isEmpty(recentRequests)}" class="table-container" style="margin-bottom: 0;">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Req ID</th>
+                        <th class="font-mono" style="width: 90px;">Req ID</th>
                         <th>Student</th>
                         <th>Exam</th>
                         <th>Question</th>
@@ -123,11 +130,11 @@
                 </thead>
                 <tbody>
                     <tr th:each="r : ${recentRequests}">
-                        <td>#<span th:text="${r.id}">1</span></td>
+                        <td class="font-mono text-cyan">#<span th:text="${r.id}">1</span></td>
                         <td><strong th:text="${r.student.name}">Student</strong></td>
                         <td th:text="${r.exam.name}">Exam</td>
-                        <td>Question <span th:text="${r.question.questionNumber}">4</span></td>
-                        <td th:text="${#temporals.format(r.createdAt, 'dd MMM yyyy HH:mm')}">Date</td>
+                        <td class="font-mono">Q<span th:text="${r.question.questionNumber}">4</span></td>
+                        <td class="font-mono" style="font-size: 0.8rem; color: var(--color-text-secondary);" th:text="${#temporals.format(r.createdAt, 'dd MMM yyyy HH:mm')}">Date</td>
                         <td>
                             <div th:replace="~{fragments/badges :: requestStatus(${r.status})}"></div>
                         </td>

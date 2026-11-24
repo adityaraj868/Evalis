@@ -4,8 +4,8 @@
 <nav th:fragment="sidebar (activeTab)" class="sidebar">
     <!-- Student Navigation -->
     <div sec:authorize="hasRole('STUDENT')" style="display: flex; flex-direction: column; gap: var(--space-1);">
-        <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase;">
-            Student Portal
+        <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase; letter-spacing: 0.08em;">
+            // Student Portal
         </div>
         <a th:href="@{/student/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active' : ''">
             <span>Dashboard</span>
@@ -20,8 +20,8 @@
 
     <!-- Faculty Navigation -->
     <div sec:authorize="hasRole('FACULTY')" style="display: flex; flex-direction: column; gap: var(--space-1);">
-        <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase;">
-            Faculty Management
+        <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase; letter-spacing: 0.08em;">
+            // Faculty Mgmt
         </div>
         <a th:href="@{/faculty/dashboard}" class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active' : ''">
             <span>Dashboard</span>
@@ -39,8 +39,8 @@
 
     <!-- Admin Navigation -->
     <div sec:authorize="hasRole('ADMIN')" style="display: flex; flex-direction: column; gap: var(--space-1);">
-        <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase;">
-            Administration
+        <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); color: var(--color-muted); padding: var(--space-2) var(--space-3); text-transform: uppercase; letter-spacing: 0.08em;">
+            // Administration
         </div>
         <a th:href="@{/admin/dashboard}" class="nav-link" th:classappend="${activeTab == 'admin-dashboard'} ? 'active' : ''">
             <span>Admin Dashboard</span>

@@ -8,9 +8,17 @@
 <section>
     <div style="max-width: 480px; margin: var(--space-8) auto;">
         <div class="card">
-            <div class="page-header" style="text-align: center; margin-bottom: var(--space-6);">
+            <div style="text-align: center; margin-bottom: var(--space-4);">
+                <div class="font-mono text-emerald" style="font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: var(--space-2);">
+                    [ EVALIS // AUTH_TERMINAL ]
+                </div>
                 <h1 class="page-title">Sign In</h1>
                 <p class="page-subtitle">Access your examination & re-evaluation workspace</p>
+            </div>
+
+            <!-- Registration Success Banner -->
+            <div th:if="${param.registered}" class="alert alert-success" style="margin-bottom: var(--space-4);">
+                Account registered successfully! Please sign in with your credentials.
             </div>
 
             <!-- Error Banner -->
@@ -26,12 +34,12 @@
             <form th:action="@{/login}" method="post">
                 <div class="form-group">
                     <label for="username" class="form-label">Email Address</label>
-                    <input type="email" id="username" name="username" class="form-control" placeholder="user@example.com" required autofocus>
+                    <input type="email" id="username" name="username" class="form-control font-mono" placeholder="user@example.com" required autofocus>
                 </div>
 
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+                    <input type="password" id="password" name="password" class="form-control font-mono" placeholder="••••••••" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-4);">
@@ -39,22 +47,31 @@
                 </button>
             </form>
 
-            <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--color-border);">
-                <div style="font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--color-muted); text-transform: uppercase; margin-bottom: var(--space-2);">
-                    Quick Demo Credentials
+            <div style="margin-top: var(--space-4); text-align: center;">
+                <span style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">
+                    Don't have an account?
+                    <a th:href="@{/register}" style="color: var(--color-primary); font-weight: var(--font-weight-semibold); text-decoration: none; margin-left: var(--space-1);">
+                        Sign Up as a Student &rarr;
+                    </a>
+                </span>
+            </div>
+
+            <div style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--bento-border);">
+                <div class="font-mono" style="font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--color-muted); text-transform: uppercase; margin-bottom: var(--space-2); letter-spacing: 0.05em;">
+                    // Quick Demo Credentials
                 </div>
                 <div style="display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--font-size-xs);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--color-surface-hover); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
-                        <span><strong>Student:</strong> student@example.com</span>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="fillForm('student@example.com', 'student123')">Use</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bento-border); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                        <span class="font-mono"><strong>Student:</strong> student@example.com</span>
+                        <button type="button" class="btn btn-secondary btn-sm font-mono" onclick="fillForm('student@example.com', 'student123')">Use</button>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--color-surface-hover); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
-                        <span><strong>Faculty:</strong> faculty@example.com</span>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="fillForm('faculty@example.com', 'faculty123')">Use</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bento-border); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                        <span class="font-mono"><strong>Faculty:</strong> faculty@example.com</span>
+                        <button type="button" class="btn btn-secondary btn-sm font-mono" onclick="fillForm('faculty@example.com', 'faculty123')">Use</button>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: var(--color-surface-hover); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
-                        <span><strong>Admin:</strong> admin@example.com</span>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="fillForm('admin@example.com', 'admin123')">Use</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bento-border); padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm);">
+                        <span class="font-mono"><strong>Admin:</strong> admin@example.com</span>
+                        <button type="button" class="btn btn-secondary btn-sm font-mono" onclick="fillForm('admin@example.com', 'admin123')">Use</button>
                     </div>
                 </div>
             </div>

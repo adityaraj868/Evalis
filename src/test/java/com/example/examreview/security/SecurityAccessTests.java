@@ -40,6 +40,12 @@ public class SecurityAccessTests {
     private RecheckRequestRepository recheckRequestRepository;
 
     @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private AuditLogRepository auditLogRepository;
+
+    @Autowired
     private StudentResultRepository studentResultRepository;
 
     @Autowired
@@ -58,6 +64,8 @@ public class SecurityAccessTests {
 
     @BeforeEach
     void setUp() {
+        auditLogRepository.deleteAll();
+        reviewRepository.deleteAll();
         recheckRequestRepository.deleteAll();
         questionMarkRepository.deleteAll();
         studentResultRepository.deleteAll();
